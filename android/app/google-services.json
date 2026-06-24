@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "790752243384",
+    "project_id": "movix-2e90b",
+    "storage_bucket": "movix-2e90b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:790752243384:android:02fabdd0a628482eeace4d",
+        "android_client_info": {
+          "package_name": "com.example.movix"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8_qutxkySMmLQXC_KMSQqyhQoM6-lc1A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
