@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:movix/features/movies/presentation/screens/movie_details_screen.dart';
 import 'package:movix/firebase_options.dart';
 
 Future<void> main() async {
@@ -21,7 +22,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
       ),
-      home: Placeholder(),
+      home: MovieDetailsScreen(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
