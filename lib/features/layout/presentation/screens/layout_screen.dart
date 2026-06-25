@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:movix/features/layout/screens/pages/home_screen.dart';
+import 'package:movix/features/layout/presentation/screens/pages/home_screen.dart';
 
-import '../../../core/theme/app_colors.dart';
+import 'package:movix/core/theme/app_colors.dart';
 
 class LayoutScreen extends StatefulWidget {
   const LayoutScreen({super.key});
@@ -13,7 +13,7 @@ class LayoutScreen extends StatefulWidget {
 class _LayoutScreenState extends State<LayoutScreen> {
   int selectedIndex = 0;
   List<Widget> screens = [
-   HomeScreen(),
+    HomeScreen(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,6 @@ class _LayoutScreenState extends State<LayoutScreen> {
           type: BottomNavigationBarType.fixed,
           items: [
             customButtonItem("assets/icons/home.png", ""),
-            customButtonItem("assets/icons/search.png", ""),
             customButtonItem("assets/icons/discover.png", ""),
             customButtonItem("assets/icons/profile.png", ""),
           ]),

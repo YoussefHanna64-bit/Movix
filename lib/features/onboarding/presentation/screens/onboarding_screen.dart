@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/routes/app_routes.dart';
-import '../../models/onboarding_model.dart';
+import '../../data/models/onboarding_model.dart';
 import '../widgets/onboarding_content.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -25,11 +25,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         end: Alignment.bottomCenter,
         colors: [
           Colors.transparent,
-          Color(0xcc121312),
+          Color(0xaa121312),
           Color(0xff121312),
           Color(0xff121312)
         ],
-        stops: [0.0, 0.5, 0.8, 1.0],
+        stops: [0.0, 0.5, 0.91, 1.0],
       ),
     ),
     OnboardingModel(
