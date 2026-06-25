@@ -4,6 +4,9 @@ import 'package:movix/core/theme/app_theme.dart';
 import 'package:movix/core/routes/app_pages.dart';
 import 'package:movix/core/routes/app_routes.dart';
 import 'package:movix/firebase_options.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movix/core/di/injection_container.dart' as di;
+import 'package:movix/features/home/presentation/cubit/home_cubit.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,6 +15,8 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  await di.init();
+
   runApp(const MyApp());
 }
 
@@ -19,11 +24,18 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.darkTheme,
-      initialRoute: AppRoutes.splash,
-      routes: AppPages.routes,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => di.sl<HomeCubit>()..loadHome(),
+        ),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme.darkTheme,
+        initialRoute: AppRoutes.splash,
+        routes: AppPages.routes,
+      ),
     );
   }
 }

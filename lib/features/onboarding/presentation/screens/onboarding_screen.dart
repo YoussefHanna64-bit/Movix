@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/routes/app_routes.dart';
 import '../../data/models/onboarding_model.dart';
 import '../widgets/onboarding_content.dart';
@@ -126,9 +127,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             image: pageData.img,
             gradient: pageData.gradient,
             buttonText: primaryText,
-            onButtonTap: () {
+            onButtonTap: () async {
               if (isLastPage) {
-                Navigator.pushReplacementNamed(context, AppRoutes.layout);
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.setBool('has_seen_onboarding', true);
+                if (context.mounted) {
+                  Navigator.pushReplacementNamed(context, AppRoutes.layout);
+                }
               } else {
                 _pageController.nextPage(
                   duration: const Duration(milliseconds: 300),

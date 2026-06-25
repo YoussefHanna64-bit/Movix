@@ -42,6 +42,10 @@ dependencies:
   animate_do:
   google_fonts:
   carousel_slider:
+  flutter_bloc:
+  dio:
+  equatable:
+  shared_preferences: ^2.5.5
 dev_dependencies:
   flutter_test:
     sdk: flutter
