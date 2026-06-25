@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movix/features/profile/presentation/widgets/profile_actions.dart';
 import 'package:movix/features/profile/presentation/widgets/profile_header.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -25,6 +26,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     "https://avatarfiles.alphacoders.com/823/thumb-1920-82313.jpg",
                 wishlistCount: 12,
                 watchedCount: 10,
+              ),
+              const SizedBox(height: 24),
+              ProfileActions(
+                onEditPressed: () {},
+                onLogoutPressed: () {},
               ),
             ],
           )),
