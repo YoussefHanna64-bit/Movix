@@ -62,13 +62,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     stops: [0.0, 0.5, 0.91, 1.0],
                   )),
                   child: ListView(
-                    padding: EdgeInsets.zero,
                     children: [
                       Image.asset(
                         'assets/images/Available Now.png',
                         width: 260,
-                        height: 90,
+                        height: 80,
                       ),
+                      const SizedBox(height: 16), // Space between title and carousel
                       //show all movies in general
                       if (allMovies.isNotEmpty)
                         CarouselSlider.builder(
@@ -88,25 +88,22 @@ class _HomeScreenState extends State<HomeScreen> {
                             return MovieCardWidget(movie: allMovies[index]);
                           },
                         ),
-                      const SizedBox(height: 10),
                       Image.asset(
                         'assets/images/Watch Now.png',
-                        width: 265,
                         height: 90,
                       ),
-                      const SizedBox(height: 25),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.all(4.0),
+                            padding: const EdgeInsets.only(left: 6.0),
                             child: Text(
                               'Action',
                               style: Theme.of(context).textTheme.titleLarge,
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.all(4.0),
+                            padding: const EdgeInsets.only(right: 6.0),
                             child: Row(
                               children: [
                                 InkWell(
@@ -127,6 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           )
                         ],
                       ),
+                      const SizedBox(height: 16), // Space between Action row and Action carousel
                       //show action movies
                       if (actionMovies.isNotEmpty)
                         CarouselSlider.builder(
@@ -141,6 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             return MovieCardWidget(movie: actionMovies[index]);
                           },
                         ),
+                      const SizedBox(height: 40), // Bottom spacing
                     ],
                   )),
             );
