@@ -31,8 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
           } else if (state is HomeLoaded) {
             final allMovies = state.movies;
             final actionMovies = state.actionMovies;
-
-            // Set initial background image if null and movies aren't empty
             if (_currentBgImage == null && allMovies.isNotEmpty) {
               _currentBgImage = allMovies[0].coverImage;
             }
@@ -68,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: 260,
                         height: 80,
                       ),
-                      const SizedBox(height: 16), // Space between title and carousel
+                      const SizedBox(height: 16),
                       //show all movies in general
                       if (allMovies.isNotEmpty)
                         CarouselSlider.builder(
@@ -124,7 +122,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           )
                         ],
                       ),
-                      const SizedBox(height: 16), // Space between Action row and Action carousel
+                      const SizedBox(
+                          height:
+                              16), // Space between Action row and Action carousel
                       //show action movies
                       if (actionMovies.isNotEmpty)
                         CarouselSlider.builder(

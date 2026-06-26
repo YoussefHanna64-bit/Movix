@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movix/features/home/presentation/screens/home_screen.dart';
+import 'package:movix/features/profile/presentation/screens/profile_screen.dart';
 
 import 'package:movix/core/theme/app_colors.dart';
 
@@ -15,7 +16,7 @@ class _LayoutScreenState extends State<LayoutScreen> {
   List<Widget> screens = [
     const HomeScreen(),
     const Center(child: Text('Discover - Coming Soon', style: TextStyle(color: Colors.white, fontSize: 24))),
-    const Center(child: Text('Profile - Coming Soon', style: TextStyle(color: Colors.white, fontSize: 24))),
+    const ProfileScreen(),
   ];
   @override
   Widget build(BuildContext context) {
