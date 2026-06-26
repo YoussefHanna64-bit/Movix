@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:movix/features/movies/presentation/screens/movie_details_screen.dart';
 import 'package:movix/core/theme/app_theme.dart';
 import 'package:movix/core/routes/app_pages.dart';
 import 'package:movix/core/routes/app_routes.dart';
@@ -36,6 +37,8 @@ class MyApp extends StatelessWidget {
         initialRoute: AppRoutes.splash,
         routes: AppPages.routes,
       ),
+      home: MovieDetailsScreen(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
