@@ -37,8 +37,8 @@ class MyApp extends StatelessWidget {
         initialRoute: AppRoutes.splash,
         routes: AppPages.routes,
       ),
-      home: MovieDetailsScreen(),
-      debugShowCheckedModeBanner: false,
+      // home: MovieDetailsScreen(),
+      // debugShowCheckedModeBanner: false,
     );
   }
 }
