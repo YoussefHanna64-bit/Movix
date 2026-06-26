@@ -8,7 +8,6 @@ import 'package:movix/core/theme/app_theme.dart';
 import 'package:movix/core/routes/app_pages.dart';
 import 'package:movix/core/routes/app_routes.dart';
 import 'package:movix/firebase_options.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movix/core/di/injection_container.dart' as di;
 import 'package:movix/features/home/presentation/cubit/home_cubit.dart';
 
@@ -32,8 +31,9 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider<AuthCubit>(
           create: (context) => AuthCubit(),
-        BlocProvider(
-          create: (_) => di.sl<HomeCubit>()..loadHome(),
+        ),
+        BlocProvider<HomeCubit>(
+          create: (context) => di.sl<HomeCubit>()..loadHome(),
         ),
       ],
       child: MaterialApp(
@@ -42,8 +42,6 @@ class MyApp extends StatelessWidget {
         initialRoute: AppRoutes.splash,
         routes: AppPages.routes,
       ),
-      // home: MovieDetailsScreen(),
-      // debugShowCheckedModeBanner: false,
     );
   }
 }

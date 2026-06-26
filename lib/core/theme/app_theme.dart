@@ -41,7 +41,7 @@ class AppTheme {
             fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
-          foregroundColor: AppColors.black, // Text color
+          foregroundColor: AppColors.black,
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
@@ -55,7 +55,7 @@ class AppTheme {
             fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
-          foregroundColor: AppColors.textPrimary, // Text color
+          foregroundColor: AppColors.textPrimary,
         ),
       ),
     );

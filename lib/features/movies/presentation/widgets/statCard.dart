@@ -10,17 +10,27 @@ class StatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width*0.30,
+      width: MediaQuery.of(context).size.width * 0.30,
       decoration: BoxDecoration(
         color: Colors.grey,
-        borderRadius: BorderRadiusGeometry.circular(10),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon ,color: Colors.yellow, size: 45,),
-          SizedBox(width: 8,),
-          Text(statName , style: TextStyle(color: Colors.white , fontSize: 24 , fontWeight: FontWeight.bold),)
+          Icon(
+            icon,
+            color: Colors.yellow,
+            size: 45,
+          ),
+          SizedBox(
+            width: 8,
+          ),
+          Text(
+            statName,
+            style: TextStyle(
+                color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+          )
         ],
       ),
     );
