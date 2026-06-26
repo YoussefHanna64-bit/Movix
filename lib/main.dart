@@ -3,7 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movix/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:movix/features/auth/presentation/screens/splash_screen.dart';
+import 'package:movix/features/movies/presentation/screens/movie_details_screen.dart';
+import 'package:movix/core/theme/app_theme.dart';
+import 'package:movix/core/routes/app_pages.dart';
+import 'package:movix/core/routes/app_routes.dart';
 import 'package:movix/firebase_options.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movix/core/di/injection_container.dart' as di;
+import 'package:movix/features/home/presentation/cubit/home_cubit.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,6 +18,8 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  await di.init();
 
   runApp(const MyApp());
 }
@@ -23,16 +32,18 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider<AuthCubit>(
           create: (context) => AuthCubit(),
+        BlocProvider(
+          create: (_) => di.sl<HomeCubit>()..loadHome(),
         ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: "Movix",
-        theme: ThemeData(
-          useMaterial3: true,
-        ),
-        home: const SplashScreen(),
+        theme: AppTheme.darkTheme,
+        initialRoute: AppRoutes.splash,
+        routes: AppPages.routes,
       ),
+      home: MovieDetailsScreen(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
