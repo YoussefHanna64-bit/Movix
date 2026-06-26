@@ -7,6 +7,8 @@ class MovieModel extends MovieEntity {
     required super.rating,
     required super.backgroundImage,
     required super.coverImage,
+    required super.mpaRating,
+    required super.genres,
   });
 
   factory MovieModel.fromJson(Map<String, dynamic> json) {
@@ -14,8 +16,14 @@ class MovieModel extends MovieEntity {
       id: json['id'] as int? ?? 0,
       title: json['title'] as String? ?? 'Unknown',
       rating: (json['rating'] as num?)?.toDouble() ?? 0.0,
-      backgroundImage: json['background_image_original'] as String? ?? json['background_image'] as String? ?? '',
-      coverImage: json['large_cover_image'] as String? ?? json['medium_cover_image'] as String? ?? '',
+      backgroundImage: json['background_image_original'] as String? ??
+          json['background_image'] as String? ??
+          '',
+      coverImage: json['large_cover_image'] as String? ??
+          json['medium_cover_image'] as String? ??
+          '',
+      mpaRating: json["mpa_rating"],
+      genres: json["genres"],
     );
   }
 }

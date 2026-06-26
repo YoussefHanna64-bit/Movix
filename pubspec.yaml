@@ -37,18 +37,18 @@ dependencies:
   dartz: ^0.10.1
   
   cupertino_icons:
-  firebase_core:
-  firebase_auth:
+  firebase_core: ^2.32.0
+  firebase_auth: ^4.20.0
   get_it:
-  cloud_firestore:
-  firebase_database:
-  animate_do:
+  cloud_firestore: ^4.17.5
+  firebase_database: ^10.5.7
+  animate_do: ^4.2.0
   google_fonts:
   carousel_slider:
   flutter_bloc:
   dio:
   equatable:
-  shared_preferences: ^2.5.5
+  shared_preferences: ^2.5.3
 dev_dependencies:
   flutter_test:
     sdk: flutter
