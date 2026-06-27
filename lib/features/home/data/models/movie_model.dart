@@ -24,7 +24,7 @@ class MovieModel extends MovieEntity {
           '',
       mpaRating: json["mpa_rating"] as String? ?? "",
       genres: (json["genres"] as List<dynamic>?)
-              ?.map((genre) => genre as String)
+              ?.map((genre) => genre.toString())
               .toList() ??
           [],
     );

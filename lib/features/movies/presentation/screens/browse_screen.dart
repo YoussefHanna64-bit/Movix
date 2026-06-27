@@ -5,6 +5,7 @@ import 'package:movix/features/home/domain/entities/movie_entity.dart';
 import 'package:movix/features/home/presentation/cubit/home_cubit.dart';
 import 'package:movix/features/home/presentation/cubit/home_state.dart';
 import 'package:movix/features/home/presentation/widgets/movie_card_widget.dart';
+import 'package:movix/features/movies/domain/enums/movie_category.dart';
 
 class BrowseScreen extends StatefulWidget {
   const BrowseScreen({super.key});
@@ -22,7 +23,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
     super.dispose();
   }
 
-  String? selectedFilterOption;
+  MovieCategory? selectedMovieCategory;
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +43,8 @@ class _BrowseScreenState extends State<BrowseScreen> {
               List<MovieEntity> movies = state.movies;
               List<MovieEntity> filteredMovies = movies
                   .where((movie) =>
-                      selectedFilterOption == null ||
-                      movie.genres.contains(selectedFilterOption))
+                      selectedMovieCategory == null ||
+                      movie.genres.contains(selectedMovieCategory!.name))
                   .where((movie) =>
                       searchQuery.isEmpty ||
                       movie.title.toLowerCase().contains(
@@ -60,17 +61,19 @@ class _BrowseScreenState extends State<BrowseScreen> {
                         child: TextField(
                           controller: textEditingControllerSearch,
                           decoration: InputDecoration(
-                              contentPadding: const EdgeInsets.only(left: 30.0),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(100.0)),
-                              prefixIcon: const Icon(Icons.search),
-                              labelText: "Search",
-                              suffixIcon: IconButton(
-                                  onPressed: () {
-                                    textEditingControllerSearch.clear();
-                                    setState(() {});
-                                  },
-                                  icon: const Icon(Icons.cancel))),
+                            contentPadding: const EdgeInsets.only(left: 30.0),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(100.0)),
+                            prefixIcon: const Icon(Icons.search),
+                            labelText: "Search",
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                textEditingControllerSearch.clear();
+                                setState(() {});
+                              },
+                              icon: const Icon(Icons.cancel),
+                            ),
+                          ),
                           onTapOutside: (event) {
                             FocusManager.instance.primaryFocus!.unfocus();
                           },
@@ -79,53 +82,68 @@ class _BrowseScreenState extends State<BrowseScreen> {
                           },
                         ),
                       ),
-                      IconButton(
-                          onPressed: () async {
-                            final String result = await showModalBottomSheet(
-                              context: context,
-                              builder: (context) {
-                                return SizedBox(
-                                  width: double.infinity,
-                                  height: 200,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        const Text(
-                                          "Choose genres",
-                                          style: TextStyle(fontSize: 20),
-                                        ),
-                                        Wrap(
-                                          alignment: WrapAlignment.center,
-                                          children: [
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.pop(
-                                                    context, "Mystery");
-                                              },
-                                              child: const Text("Mystery"),
-                                            ),
-                                            TextButton(
-                                                onPressed: () {
-                                                  Navigator.pop(
-                                                      context, "Thriller");
-                                                },
-                                                child: const Text("Thriller")),
-                                          ],
-                                        ),
-                                      ],
+                      Badge(
+                        isLabelVisible: selectedMovieCategory != null,
+                        label: const Text("1"),
+                        offset: const Offset(0, 0),
+                        child: IconButton(
+                            onPressed: () async {
+                              final MovieCategory? result =
+                                  await showModalBottomSheet<MovieCategory?>(
+                                context: context,
+                                builder: (context) {
+                                  return SafeArea(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const Text(
+                                            "Choose genres",
+                                            style: TextStyle(fontSize: 20),
+                                          ),
+                                          Wrap(
+                                            alignment: WrapAlignment.center,
+                                            children: [
+                                              for (final movieCategory
+                                                  in MovieCategory.values)
+                                                TextButton(
+                                                    style: TextButton.styleFrom(
+                                                        backgroundColor:
+                                                            selectedMovieCategory ==
+                                                                    movieCategory
+                                                                ? Colors.white10
+                                                                : null),
+                                                    onPressed: () {
+                                                      if (selectedMovieCategory ==
+                                                          movieCategory) {
+                                                        selectedMovieCategory =
+                                                            null;
+                                                        Navigator.pop(context);
+                                                      } else {
+                                                        Navigator.pop(context,
+                                                            movieCategory);
+                                                      }
+                                                    },
+                                                    child: Text(
+                                                        movieCategory.name))
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                );
-                              },
-                            );
-                            setState(() {
-                              selectedFilterOption = result;
-                            });
-                          },
-                          icon: const Icon(Icons.filter_list))
+                                  );
+                                },
+                              );
+                              setState(() {
+                                selectedMovieCategory =
+                                    result ?? selectedMovieCategory;
+                              });
+                            },
+                            icon: const Icon(Icons.filter_list)),
+                      )
                     ],
                   ),
                   filteredMovies.isEmpty
