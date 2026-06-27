@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:movix/features/movies/presentation/widgets/castCard.dart';
 import 'package:movix/features/movies/presentation/widgets/movieBanner.dart';
 import 'package:movix/features/movies/presentation/widgets/screenShots.dart';
 
 import '../widgets/statCard.dart';
 
 class MovieDetailsScreen extends StatelessWidget {
+  const MovieDetailsScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,13 +40,14 @@ class MovieDetailsScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   StatCard(icon: Icons.favorite , statName: "15"),
-                  StatCard(icon: Icons.favorite , statName: "15"),
-                  StatCard(icon: Icons.favorite , statName: "15"),
+                  StatCard(icon: Icons.access_time_filled , statName: "90"),
+                  StatCard(icon: Icons.star , statName: "7.6"),
                 ],
               ),
 
               SizedBox(height: 10,),
               ///Screenshots
+              ///Make ListView
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Column(
@@ -62,7 +66,80 @@ class MovieDetailsScreen extends StatelessWidget {
 
                   ],
                 ),
-              )
+              ),
+
+              SizedBox(height: 10,),
+              ///Similar Movies
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Similar" , style: TextStyle(color: Colors.white , fontWeight: FontWeight.bold , fontSize: 24),),
+                    SizedBox(height: 20,),
+                    ///GridView of similar movies
+                    Center(child: Text("Coming Soon" , style: TextStyle(color: Colors.white , fontWeight: FontWeight.bold , fontSize: 50),),),
+
+                  ],
+                ),
+              ),
+
+              SizedBox(height: 10,),
+              ///Summary
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Summary" , style: TextStyle(color: Colors.white , fontWeight: FontWeight.bold , fontSize: 24),),
+                    SizedBox(height: 20,),
+
+                    Text("Following the events of Spider-Man No Way Home, Doctor Strange unwittingly casts a forbidden spell that accidentally opens up the multiverse. With help from Wong and Scarlet Witch, Strange confronts various versions of himself as well as teaming up with the young America Chavez while traveling through various realities and working to restore reality as he knows it. Along the way, Strange and his allies realize they must take on a powerful new adversary who seeks to take over the multiverse.—Blazer346"
+                    , style: TextStyle(color: Colors.white, fontSize: 18),),
+
+                  ],
+                ),
+              ),
+
+              SizedBox(height: 10,),
+              ///Cast
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Cast" , style: TextStyle(color: Colors.white , fontWeight: FontWeight.bold , fontSize: 24),),
+                    SizedBox(height: 20,),
+
+                    Text("ListView of Cast Card"
+                      , style: TextStyle(color: Colors.white, fontSize: 18),),
+
+                    CastCard(),
+
+                  ],
+                ),
+              ),
+
+
+              SizedBox(height: 10,),
+              ///Genres
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Genres" , style: TextStyle(color: Colors.white , fontWeight: FontWeight.bold , fontSize: 24),),
+                    SizedBox(height: 20,),
+
+                    Container(
+                      color: Colors.grey,
+                      child: Text("GridView of Genres Card"
+                        , style: TextStyle(color: Colors.white, fontSize: 18),),
+                    ),
+
+                  ],
+                ),
+              ),
 
             ],
           ),
