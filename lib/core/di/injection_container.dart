@@ -1,6 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
+import 'package:movix/features/profile/data/datasources/profile_remote_data_source.dart';
+import 'package:movix/features/profile/data/repositories/profile_repository_impl.dart';
+import 'package:movix/features/profile/domain/repositories/profile_repository.dart';
+import 'package:movix/features/profile/domain/usecases/add_to_history_usecase.dart';
+import 'package:movix/features/profile/domain/usecases/get_user_profile_usecase.dart';
+import 'package:movix/features/profile/domain/usecases/toggle_wishlist_usecase.dart';
+import 'package:movix/features/profile/domain/usecases/update_user_profile_usecase.dart';
+import 'package:movix/features/profile/presentation/cubit/profile_cubit.dart';
 import '../network/dio_client.dart';
 import '../../features/auth/data/datasources/auth_remote_data_source.dart';
 import '../../features/auth/data/repositories/auth_repository_impl.dart';
@@ -57,4 +65,22 @@ Future<void> init() async {
 
   // Core
   sl.registerLazySingleton(() => DioClient());
+
+  sl.registerLazySingleton<ProfileRemoteDataSource>(
+      () => ProfileRemoteDataSourceImpl(firestore: sl(), firebaseAuth: sl()));
+
+  sl.registerLazySingleton<ProfileRepository>(
+      () => ProfileRepositoryImpl(remoteDataSource: sl()));
+
+  sl.registerLazySingleton(() => GetUserProfileUseCase(sl()));
+  sl.registerLazySingleton(() => UpdateUserProfileUseCase(sl()));
+  sl.registerLazySingleton(() => ToggleWishlistUseCase(sl()));
+  sl.registerLazySingleton(() => AddToHistoryUseCase(sl()));
+
+  sl.registerFactory(() => ProfileCubit(
+        getUserProfileUseCase: sl(),
+        updateUserProfileUseCase: sl(),
+        toggleWishlistUseCase: sl(),
+        addToHistoryUseCase: sl(),
+      ));
 }
