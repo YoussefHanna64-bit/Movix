@@ -22,8 +22,11 @@ class MovieModel extends MovieEntity {
       coverImage: json['large_cover_image'] as String? ??
           json['medium_cover_image'] as String? ??
           '',
-      mpaRating: json["mpa_rating"],
-      genres: json["genres"],
+      mpaRating: json["mpa_rating"] as String? ?? "",
+      genres: (json["genres"] as List<dynamic>?)
+              ?.map((genre) => genre.toString())
+              .toList() ??
+          [],
     );
   }
 }
