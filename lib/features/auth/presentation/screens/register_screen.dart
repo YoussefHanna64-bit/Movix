@@ -112,7 +112,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       child: ClipOval(
                         child: Image.asset(
-                          "lib/features/auth/images/avatar${index + 1}.png",
+                          "assets/images/avatar${index + 1}.png",
                           height: isSelected ? 120 : 80,
                           width: isSelected ? 120 : 80,
                           fit: BoxFit.cover,

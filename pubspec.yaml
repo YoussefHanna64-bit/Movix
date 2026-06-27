@@ -75,12 +75,7 @@ flutter:
   assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
-    - lib/features/auth/images/logoimage.png
-    - lib/features/auth/images/forgotpassimage.png
-    - lib/features/auth/images/avatarimage.png
-    - lib/features/auth/images/avatar1.png
-    - lib/features/auth/images/avatar2.png
-    - lib/features/auth/images/avatar3.png
+    - lib/features/auth/images/
     - assets/images/
     - assets/icons/
 
