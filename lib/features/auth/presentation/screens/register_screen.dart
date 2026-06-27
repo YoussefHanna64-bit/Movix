@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movix/core/routes/app_routes.dart';
+import 'package:movix/core/widgets/app_text_field.dart';
+import 'package:movix/core/widgets/avatar_picker.dart';
 import 'package:movix/features/auth/presentation/cubit/auth_cubit.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -88,39 +90,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Column(
             children: [
               const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(3, (index) {
-                  bool isSelected = _selectedAvatar == index;
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _selectedAvatar = index;
-                      });
-                    },
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      margin: const EdgeInsets.symmetric(horizontal: 10),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: isSelected
-                              ? const Color(0xFFF6BD00)
-                              : Colors.transparent,
-                          width: isSelected ? 3 : 0,
-                        ),
-                      ),
-                      child: ClipOval(
-                        child: Image.asset(
-                          "assets/images/avatar${index + 1}.png",
-                          height: isSelected ? 120 : 80,
-                          width: isSelected ? 120 : 80,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                  );
-                }),
+              AvatarPicker(
+                selectedAvatar: _selectedAvatar,
+                onAvatarSelected: (index) {
+                  setState(() => _selectedAvatar = index);
+                },
               ),
               const SizedBox(height: 10),
               const Text(
@@ -133,49 +107,47 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 child: Form(
                   child: Column(
                     children: [
-                      _buildTextField(
-                        hintText: "Name",
-                        icon: Icons.badge_outlined,
+                      AppTextField(
                         controller: _nameController,
+                        hintText: "Name",
+                        prefixIcon: Icons.badge_outlined,
                       ),
                       const SizedBox(height: 15),
-                      _buildTextField(
-                        hintText: "Email",
-                        icon: Icons.email,
-                        keyboardType: TextInputType.emailAddress,
+                      AppTextField(
                         controller: _emailController,
+                        hintText: "Email",
+                        prefixIcon: Icons.email,
+                        keyboardType: TextInputType.emailAddress,
                       ),
                       const SizedBox(height: 15),
-                      _buildTextField(
-                        hintText: "Password",
-                        icon: Icons.lock,
-                        isPassword: true,
+                      AppTextField(
                         controller: _passwordController,
-                        secureText: securePassword,
-                        onTogglePassword: () {
+                        hintText: "Password",
+                        prefixIcon: Icons.lock,
+                        obscureText: securePassword,
+                        onToggleObscure: () {
                           setState(() {
                             securePassword = !securePassword;
                           });
                         },
                       ),
                       const SizedBox(height: 15),
-                      _buildTextField(
-                        hintText: "Confirm Password",
+                      AppTextField(
                         controller: _confirmPasswordController,
-                        icon: Icons.lock,
-                        isPassword: true,
-                        secureText: secureConfirmPassword,
-                        onTogglePassword: () {
+                        hintText: "Confirm Password",
+                        prefixIcon: Icons.lock,
+                        obscureText: secureConfirmPassword,
+                        onToggleObscure: () {
                           setState(() {
                             secureConfirmPassword = !secureConfirmPassword;
                           });
                         },
                       ),
                       const SizedBox(height: 15),
-                      _buildTextField(
+                      AppTextField(
                         controller: _phoneController,
                         hintText: "Phone Number",
-                        icon: Icons.phone,
+                        prefixIcon: Icons.phone,
                         keyboardType: TextInputType.phone,
                       ),
                       const SizedBox(height: 30),
@@ -262,43 +234,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTextField({
-    required String hintText,
-    required IconData icon,
-    TextEditingController? controller,
-    bool isPassword = false,
-    bool secureText = false,
-    VoidCallback? onTogglePassword,
-    TextInputType keyboardType = TextInputType.text,
-  }) {
-    return TextFormField(
-      style: const TextStyle(color: Colors.white),
-      obscureText: secureText,
-      keyboardType: keyboardType,
-      controller: controller,
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: const Color(0xFF282A28),
-        prefixIcon: Icon(icon, color: Colors.white),
-        suffixIcon: isPassword
-            ? IconButton(
-                icon: Icon(
-                  secureText ? Icons.visibility_off : Icons.visibility,
-                  color: Colors.white,
-                ),
-                onPressed: onTogglePassword,
-              )
-            : null,
-        hintText: hintText,
-        hintStyle: const TextStyle(color: Colors.white70),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide.none,
         ),
       ),
     );

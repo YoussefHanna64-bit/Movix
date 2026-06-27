@@ -62,14 +62,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       ProfileHeader(
                         username: user.name,
-                        avatarUrl:
-                            "assets/images/avatar${user.avatar + 1}.png",
+                        avatarUrl: "assets/images/avatar${user.avatar + 1}.png",
                         wishlistCount: user.wishList?.length ?? 0,
                         watchedCount: user.history?.length ?? 0,
                       ),
                       const SizedBox(height: 16),
                       ProfileActions(
-                        onEditPressed: () {},
+                        onEditPressed: () {
+                          Navigator.pushNamed(context, AppRoutes.updateProfile);
+                        },
                         onLogoutPressed: () {
                           context.read<AuthCubit>().logout();
                         },
