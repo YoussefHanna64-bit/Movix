@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:movix/core/utils/firebase_error_handler.dart';
 import '../../domain/usecases/register_usecase.dart';
 import '../../domain/usecases/login_usecase.dart';
 import '../../domain/usecases/logout_usecase.dart';
@@ -32,72 +32,6 @@ class AuthCubit extends Cubit<AuthState> {
     required this.forgetPasswordUseCase,
   }) : super(AuthInitial());
 
-  // Converts Firebase exceptions into user-friendly messages
-  String _getReadableError(dynamic e) {
-    if (e is FirebaseAuthException) {
-      switch (e.code) {
-        case 'user-not-found':
-          return 'No account found with this email.';
-        case 'wrong-password':
-          return 'Incorrect password. Please try again.';
-        case 'invalid-credential':
-          return 'Invalid email or password. Please try again.';
-        case 'email-already-in-use':
-          return 'This email is already registered. Try logging in.';
-        case 'weak-password':
-          return 'Password is too weak. Use at least 6 characters.';
-        case 'invalid-email':
-          return 'The email address is not valid.';
-        case 'user-disabled':
-          return 'This account has been disabled. Contact support.';
-        case 'too-many-requests':
-          return 'Too many attempts. Please try again later.';
-        case 'network-request-failed':
-          return 'No internet connection. Please check your network.';
-        case 'operation-not-allowed':
-          return 'This sign-in method is not enabled.';
-        default:
-          return e.message ?? 'An unexpected error occurred.';
-      }
-    }
-    String message = e.toString();
-    // Strip "Exception: " prefix and Firebase error code patterns
-    if (message.startsWith('Exception: ')) {
-      message = message.substring(11);
-    }
-    // Handle wrapped Firebase errors like "[firebase_auth/error-code] message"
-    final firebaseRegex = RegExp(r'\[firebase_auth/([^\]]+)\]\s*(.*)');
-    final match = firebaseRegex.firstMatch(message);
-    if (match != null) {
-      final code = match.group(1)!;
-      switch (code) {
-        case 'user-not-found':
-          return 'No account found with this email.';
-        case 'wrong-password':
-          return 'Incorrect password. Please try again.';
-        case 'invalid-credential':
-          return 'Invalid email or password. Please try again.';
-        case 'email-already-in-use':
-          return 'This email is already registered. Try logging in.';
-        case 'weak-password':
-          return 'Password is too weak. Use at least 6 characters.';
-        case 'invalid-email':
-          return 'The email address is not valid.';
-        case 'user-disabled':
-          return 'This account has been disabled. Contact support.';
-        case 'too-many-requests':
-          return 'Too many attempts. Please try again later.';
-        case 'network-request-failed':
-          return 'No internet connection. Please check your network.';
-        default:
-          return match.group(2)?.isNotEmpty == true
-              ? match.group(2)!
-              : 'An unexpected error occurred.';
-      }
-    }
-    return message.isNotEmpty ? message : 'An unexpected error occurred.';
-  }
-
   // Register method
   Future<void> register({
     required String name,
@@ -117,7 +51,7 @@ class AuthCubit extends Cubit<AuthState> {
       );
       emit(AuthSuccess());
     } catch (e) {
-      emit(AuthFailure(_getReadableError(e)));
+      emit(AuthFailure(FirebaseErrorHandler.getReadableError(e)));
     }
   }
 
@@ -131,7 +65,7 @@ class AuthCubit extends Cubit<AuthState> {
       );
       emit(AuthSuccess());
     } catch (e) {
-      emit(AuthFailure(_getReadableError(e)));
+      emit(AuthFailure(FirebaseErrorHandler.getReadableError(e)));
     }
   }
 
@@ -142,7 +76,7 @@ class AuthCubit extends Cubit<AuthState> {
       await logoutUseCase.execute();
       emit(AuthInitial());
     } catch (e) {
-      emit(AuthFailure(_getReadableError(e)));
+      emit(AuthFailure(FirebaseErrorHandler.getReadableError(e)));
     }
   }
 
@@ -153,7 +87,7 @@ class AuthCubit extends Cubit<AuthState> {
       await forgetPasswordUseCase.execute(email);
       emit(AuthSuccess());
     } catch (e) {
-      emit(AuthFailure(_getReadableError(e)));
+      emit(AuthFailure(FirebaseErrorHandler.getReadableError(e)));
     }
   }
 }
