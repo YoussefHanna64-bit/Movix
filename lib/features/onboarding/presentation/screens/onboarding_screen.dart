@@ -133,7 +133,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 await prefs.setBool('has_seen_onboarding', true);
                 if (context.mounted) {
                   await Navigator.pushReplacementNamed(
-                      context, AppRoutes.layout);
+                      context, AppRoutes.login);
                 }
               } else {
                 await _pageController.nextPage(

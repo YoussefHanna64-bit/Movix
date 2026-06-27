@@ -2,8 +2,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movix/features/auth/presentation/cubit/auth_cubit.dart';
-import 'package:movix/features/auth/presentation/screens/splash_screen.dart';
-import 'package:movix/features/movies/presentation/screens/movie_details_screen.dart';
 import 'package:movix/core/theme/app_theme.dart';
 import 'package:movix/core/routes/app_pages.dart';
 import 'package:movix/core/routes/app_routes.dart';
@@ -29,7 +27,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<AuthCubit>(create: (context) => AuthCubit()),
+        BlocProvider(create: (_) => di.sl<AuthCubit>()),
         BlocProvider(create: (_) => di.sl<HomeCubit>()..loadHome()),
       ],
       child: MaterialApp(

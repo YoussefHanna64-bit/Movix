@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movix/core/routes/app_routes.dart';
 import 'package:movix/features/auth/presentation/cubit/auth_cubit.dart';
-import 'package:movix/features/auth/presentation/screens/home_screen_test.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -182,11 +182,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       BlocConsumer<AuthCubit, AuthState>(
                         listener: (context, state) {
                           if (state is AuthSuccess) {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const HomeScreenTest()));
+                            Navigator.pushReplacementNamed(
+                                context, AppRoutes.layout);
                           } else if (state is AuthFailure) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text(state.error)),
@@ -245,7 +242,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              Navigator.pop(context);
+                              Navigator.pushReplacementNamed(
+                                  context, AppRoutes.login);
                             },
                             child: const Text(
                               "Login",

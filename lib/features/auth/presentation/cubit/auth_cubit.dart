@@ -1,12 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../../domain/usecases/register_usecase.dart';
 import '../../domain/usecases/login_usecase.dart';
 import '../../domain/usecases/logout_usecase.dart';
 import '../../domain/usecases/forget_password_usecase.dart';
-import '../../data/repositories/auth_repository_impl.dart';
-import '../../data/datasources/auth_remote_data_source.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 abstract class AuthState {}
 
@@ -23,25 +20,17 @@ class AuthFailure extends AuthState {
 }
 
 class AuthCubit extends Cubit<AuthState> {
-  AuthCubit() : super(AuthInitial());
+  final RegisterUseCase registerUseCase;
+  final LoginUseCase loginUseCase;
+  final LogoutUseCase logoutUseCase;
+  final ForgetPasswordUseCase forgetPasswordUseCase;
 
-  // Create instances of the use cases
-  final RegisterUseCase registerUseCase = RegisterUseCase(AuthRepositoryImpl(
-      AuthRemoteDataSourceImpl(
-          firebaseAuth: FirebaseAuth.instance,
-          firestore: FirebaseFirestore.instance)));
-  final LoginUseCase loginUseCase = LoginUseCase(AuthRepositoryImpl(
-      AuthRemoteDataSourceImpl(
-          firebaseAuth: FirebaseAuth.instance,
-          firestore: FirebaseFirestore.instance)));
-  final LogoutUseCase logoutUseCase = LogoutUseCase(AuthRepositoryImpl(
-      AuthRemoteDataSourceImpl(
-          firebaseAuth: FirebaseAuth.instance,
-          firestore: FirebaseFirestore.instance)));
-  final ForgetPasswordUseCase forgetPasswordUseCase = ForgetPasswordUseCase(
-      AuthRepositoryImpl(AuthRemoteDataSourceImpl(
-          firebaseAuth: FirebaseAuth.instance,
-          firestore: FirebaseFirestore.instance)));
+  AuthCubit({
+    required this.registerUseCase,
+    required this.loginUseCase,
+    required this.logoutUseCase,
+    required this.forgetPasswordUseCase,
+  }) : super(AuthInitial());
 
   // Converts Firebase exceptions into user-friendly messages
   String _getReadableError(dynamic e) {
