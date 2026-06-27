@@ -31,7 +31,7 @@ class _LayoutScreenState extends State<LayoutScreen> {
           },
           fixedColor: Colors.white,
           selectedFontSize: 16,
-          selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
+          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
           backgroundColor: AppColors.grey,
           unselectedItemColor: AppColors.textSecondary,
           showUnselectedLabels: false,
@@ -51,7 +51,7 @@ class _LayoutScreenState extends State<LayoutScreen> {
         activeIcon: Container(
           width: 60,
           height: 35,
-          padding: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(24)),
           child: ImageIcon(
             AssetImage(image),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movix/core/widgets/custom_error_widget.dart';
 import 'package:movix/features/home/domain/entities/movie_entity.dart';
 import 'package:movix/features/home/presentation/cubit/home_cubit.dart';
 import 'package:movix/features/home/presentation/cubit/home_state.dart';
@@ -32,9 +33,9 @@ class _BrowseScreenState extends State<BrowseScreen> {
         child: BlocBuilder<HomeCubit, HomeState>(
           builder: (context, state) {
             if (state is HomeError) {
-              return Center(
-                  child: Text(state.errorMessage,
-                      style: const TextStyle(color: Colors.white)));
+              return CustomErrorWidget(
+                  errorMessage: state.errorMessage,
+                  onRetry: () => context.read<HomeCubit>().loadHome());
             } else if (state is HomeLoaded) {
               String searchQuery = textEditingControllerSearch.text;
 

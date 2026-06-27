@@ -132,22 +132,25 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 final prefs = await SharedPreferences.getInstance();
                 await prefs.setBool('has_seen_onboarding', true);
                 if (context.mounted) {
-                  Navigator.pushReplacementNamed(context, AppRoutes.layout);
+                  await Navigator.pushReplacementNamed(
+                      context, AppRoutes.layout);
                 }
               } else {
-                _pageController.nextPage(
+                await _pageController.nextPage(
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeIn,
                 );
               }
             },
             secondaryButtonText: isFirstPage ? null : 'Back',
-            onSecondaryButtonTap: isFirstPage ? null : () {
-              _pageController.previousPage(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeIn,
-              );
-            },
+            onSecondaryButtonTap: isFirstPage
+                ? null
+                : () {
+                    _pageController.previousPage(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeIn,
+                    );
+                  },
           );
         },
       ),

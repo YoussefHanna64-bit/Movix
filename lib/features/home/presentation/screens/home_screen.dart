@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movix/core/theme/app_colors.dart';
+import 'package:movix/core/widgets/custom_error_widget.dart';
 import 'package:movix/features/home/presentation/widgets/movie_card_widget.dart';
 import 'package:movix/features/home/presentation/cubit/home_cubit.dart';
 import 'package:movix/features/home/presentation/cubit/home_state.dart';
@@ -25,9 +26,9 @@ class _HomeScreenState extends State<HomeScreen> {
           if (state is HomeLoading || state is HomeInitial) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is HomeError) {
-            return Center(
-                child: Text(state.errorMessage,
-                    style: const TextStyle(color: Colors.white)));
+            return CustomErrorWidget(
+                errorMessage: state.errorMessage,
+                onRetry: () => context.read<HomeCubit>().loadHome());
           } else if (state is HomeLoaded) {
             final allMovies = state.movies;
             final actionMovies = state.actionMovies;
@@ -67,7 +68,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         height: 80,
                       ),
                       const SizedBox(height: 16),
-                      //show all movies in general
                       if (allMovies.isNotEmpty)
                         CarouselSlider.builder(
                           itemCount: allMovies.length,
@@ -122,10 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           )
                         ],
                       ),
-                      const SizedBox(
-                          height:
-                              16), // Space between Action row and Action carousel
-                      //show action movies
+                      const SizedBox(height: 16),
                       if (actionMovies.isNotEmpty)
                         CarouselSlider.builder(
                           itemCount: actionMovies.length,
@@ -139,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             return MovieCardWidget(movie: actionMovies[index]);
                           },
                         ),
-                      const SizedBox(height: 40), // Bottom spacing
+                      const SizedBox(height: 40),
                     ],
                   )),
             );
