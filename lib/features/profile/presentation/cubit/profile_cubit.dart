@@ -33,11 +33,22 @@ class ProfileCubit extends Cubit<ProfileState> {
       {required String newName,
       required int newAvatar,
       required String phoneNumber}) async {
+    if (state is! ProfileLoaded) {
+      return;
+    }
+    final currentUser = (state as ProfileLoaded).user;
+
     try {
       await updateUserProfileUseCase.execute(
           name: newName, avatar: newAvatar, phoneNumber: phoneNumber);
 
-      await loadProfile();
+      final updatedUser = currentUser.copyWith(
+        name: newName,
+        avatar: newAvatar,
+        phoneNumber: phoneNumber,
+      );
+
+      emit(ProfileLoaded(updatedUser));
     } catch (e) {
       emit(ProfileError(FirebaseErrorHandler.getReadableError(e)));
     }
@@ -56,14 +67,25 @@ class ProfileCubit extends Cubit<ProfileState> {
       return;
     }
 
+    final currentUser = (state as ProfileLoaded).user;
     final isInList = isInWishlist(movieId);
+
+    final updatedWishList = List<String>.from(currentUser.wishList ?? []);
+
+    if (isInList) {
+      updatedWishList.remove(movieId.toString());
+    } else {
+      updatedWishList.add(movieId.toString());
+    }
+
+    final updatedUser = currentUser.copyWith(wishList: updatedWishList);
+    emit(ProfileLoaded(updatedUser));
 
     try {
       await toggleWishlistUseCase.execute(
           movieId: movieId, isAdding: !isInList);
-
-      await loadProfile();
     } catch (e) {
+      emit(ProfileLoaded(currentUser));
       emit(ProfileError(FirebaseErrorHandler.getReadableError(e)));
     }
   }
@@ -73,15 +95,22 @@ class ProfileCubit extends Cubit<ProfileState> {
       return;
     }
 
-    final user = (state as ProfileLoaded).user;
-    if (user.history?.contains(movieId.toString()) ?? false) {
+    final currentUser = (state as ProfileLoaded).user;
+
+    if (currentUser.history?.contains(movieId.toString()) ?? false) {
       return;
     }
 
+    final updatedHistory = List<String>.from(currentUser.history ?? []);
+    updatedHistory.add(movieId.toString());
+
+    final updatedUser = currentUser.copyWith(history: updatedHistory);
+    emit(ProfileLoaded(updatedUser));
+
     try {
       await addToHistoryUseCase.execute(movieId);
-      await loadProfile();
     } catch (e) {
+      emit(ProfileLoaded(currentUser));
       emit(ProfileError(FirebaseErrorHandler.getReadableError(e)));
     }
   }

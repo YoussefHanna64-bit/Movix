@@ -16,4 +16,22 @@ class UserEntity {
     this.wishList,
     this.history,
   });
+
+  UserEntity copyWith({
+    String? name,
+    int? avatar,
+    String? phoneNumber,
+    List<String>? wishList,
+    List<String>? history,
+  }) {
+    return UserEntity(
+      uid: uid,
+      email: email,
+      name: name ?? this.name,
+      avatar: avatar ?? this.avatar,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      wishList: wishList ?? this.wishList,
+      history: history ?? this.history,
+    );
+  }
 }
