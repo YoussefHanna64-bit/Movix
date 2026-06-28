@@ -4,6 +4,7 @@ import 'package:movix/core/di/injection_container.dart' as di;
 import 'package:movix/features/movies/presentation/cubit/movies_cubit.dart';
 import 'package:movix/features/auth/presentation/screens/login_screen.dart';
 import 'package:movix/features/auth/presentation/screens/register_screen.dart';
+import 'package:movix/features/profile/presentation/screens/update_profile_screen.dart';
 import 'package:movix/features/splash/presentation/screens/splash_screen.dart';
 import 'package:movix/features/onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:movix/features/layout/presentation/screens/layout_screen.dart';
@@ -21,6 +22,7 @@ class AppPages {
               create: (_) => di.sl<MoviesCubit>(),
               child: const MovieDetailsScreen(),
             ),
+        AppRoutes.updateProfile: (context) => const UpdateProfileScreen(),
       };
 }
 

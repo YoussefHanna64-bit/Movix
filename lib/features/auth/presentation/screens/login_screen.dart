@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movix/core/routes/app_routes.dart';
+import 'package:movix/core/widgets/app_text_field.dart';
 import 'package:movix/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:movix/features/auth/presentation/screens/forget_password_screen.dart';
 
@@ -66,54 +67,23 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Form(
                 child: Column(
                   children: [
-                    TextFormField(
+                    AppTextField(
                       controller: _emailController,
-                      style: const TextStyle(color: Colors.white),
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: const Color(0xFF282A28),
-                        prefixIcon: const Icon(
-                          Icons.email,
-                          color: Colors.white,
-                        ),
-                        hintText: "Email",
-                        hintStyle: const TextStyle(color: Colors.white70),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
+                      hintText: "Email",
+                      prefixIcon: Icons.email,
                       keyboardType: TextInputType.emailAddress,
                     ),
                     const SizedBox(height: 20),
-                    TextFormField(
+                    AppTextField(
                       controller: _passwordController,
-                      style: const TextStyle(color: Colors.white),
+                      hintText: "Password",
+                      prefixIcon: Icons.lock,
                       obscureText: secureText,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: const Color(0xFF282A28),
-                        prefixIcon: const Icon(Icons.lock, color: Colors.white),
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            secureText
-                                ? Icons.visibility_off
-                                : Icons.visibility,
-                            color: Colors.white,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              secureText = !secureText;
-                            });
-                          },
-                        ),
-                        hintText: "Password",
-                        hintStyle: const TextStyle(color: Colors.white70),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
+                      onToggleObscure: () {
+                        setState(() {
+                          secureText = !secureText;
+                        });
+                      },
                       keyboardType: TextInputType.visiblePassword,
                     ),
                     Align(
