@@ -1,14 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../../domain/entities/cast_entity.dart';
 
 class CastCard extends StatelessWidget{
-  // final Movie movie;
+  final CastEntity cast;
 
-  const CastCard({super.key});
+  const CastCard({super.key,required this.cast});
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 90,
+      height: 95,
       decoration: BoxDecoration(
         borderRadius: BorderRadiusGeometry.circular(15),
         color: Colors.grey,
@@ -21,7 +22,7 @@ class CastCard extends StatelessWidget{
             ClipRRect(
               borderRadius: BorderRadius.circular(12.0),
               child: Image.network(
-                "https://i.insider.com/679a5f41196626c40985a100?width=1200&format=jpeg",
+                cast.castImage,
                 width: 80.0,
                 height: 80.0,
                 fit: BoxFit.cover,
@@ -37,11 +38,12 @@ class CastCard extends StatelessWidget{
             ),
             SizedBox(width: 15,),
             Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Name : Name" , style: TextStyle(fontSize: 20),),
-                Text("Character : Char" , style: TextStyle(fontSize: 20),),
+                Text("Name : ${cast.castName}" , style: const TextStyle(fontSize: 14 , fontWeight: FontWeight.w700 , overflow: TextOverflow.ellipsis),),
+                const SizedBox(height: 10,),
+                Text("Character : ${cast.castCharacter}" , style: const TextStyle(fontSize: 14 , fontWeight: FontWeight.w700 , overflow: TextOverflow.ellipsis),),
               ],
             ),
           ],

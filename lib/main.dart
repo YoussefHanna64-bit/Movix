@@ -32,12 +32,14 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => di.sl<HomeCubit>()..loadHome()),
         BlocProvider(create: (_) => di.sl<ProfileCubit>()..loadProfile()),
       ],
+
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: AppTheme.darkTheme,
         initialRoute: AppRoutes.splash,
         routes: AppPages.routes,
       ),
+
     );
   }
 }

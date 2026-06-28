@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:movix/core/routes/app_routes.dart';
 import 'package:movix/features/home/domain/entities/movie_entity.dart';
 
 class MovieCardWidget extends StatelessWidget {
@@ -13,8 +13,15 @@ class MovieCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.pushNamed(
+          context,
+          AppRoutes.movieDetails,
+          arguments: movie.id,
+        );
+      },
       child: Container(
+
         width: 180,
         height: 280,
         decoration: BoxDecoration(
