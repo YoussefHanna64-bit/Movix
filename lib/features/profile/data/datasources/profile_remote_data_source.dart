@@ -57,11 +57,11 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
 
     if (isAdding) {
       await userRef.update({
-        "wishList": FieldValue.arrayUnion([movieId])
+        "wishList": FieldValue.arrayUnion([movieId.toString()])
       });
     } else {
       await userRef.update({
-        "wishList": FieldValue.arrayRemove([movieId])
+        "wishList": FieldValue.arrayRemove([movieId.toString()])
       });
     }
   }
@@ -71,7 +71,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
     final userRef = firestore.collection("users").doc(_currentUid);
 
     await userRef.update({
-      "history": FieldValue.arrayUnion([movieId])
+      "history": FieldValue.arrayUnion([movieId.toString()])
     });
   }
 }

@@ -1,3 +1,8 @@
+import 'package:movix/features/movies/data/datasources/movieDetails_remote_data_source.dart';
+import 'package:movix/features/movies/data/repositories/movieDetails_repository_impl.dart';
+import 'package:movix/features/movies/domain/repositories/movieDetails_repository.dart';
+import 'package:movix/features/movies/domain/usecases/get_movie_details_usecase.dart';
+import 'package:movix/features/movies/presentation/cubit/movies_cubit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
@@ -69,6 +74,19 @@ Future<void> init() async {
   sl.registerLazySingleton<HomeRemoteDataSource>(
       () => HomeRemoteDataSourceImpl(dioClient: sl()));
 
+  // Movies
+  sl.registerFactory(() => MoviesCubit(
+        getMovieDetailsUseCase: sl(),
+      ));
+
+  sl.registerLazySingleton(() => GetMovieDetailsUseCase(sl()));
+
+  sl.registerLazySingleton<MoviedetailsRepository>(
+      () => MovieDetailsRepositoryImpl(remoteDataSource: sl()));
+
+  sl.registerLazySingleton<MoviedetailsRemoteDataSource>(
+      () => MoviedetailsRemoteDataSourceImpl(dioClient: sl()));
+
   // Core
   sl.registerLazySingleton(() => DioClient());
 
@@ -90,3 +108,4 @@ Future<void> init() async {
         addToHistoryUseCase: sl(),
       ));
 }
+

@@ -1,85 +1,66 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movix/features/movies/domain/entities/movieDetails_entity.dart';
+import 'package:movix/features/profile/presentation/cubit/profile_cubit.dart';
+import 'package:movix/features/profile/presentation/cubit/profile_state.dart';
 
-class MovieBanner extends StatelessWidget{
-  const MovieBanner({super.key});
+class MovieBanner extends StatelessWidget {
+  final MovieDetailsEntity movie;
+  final int movieId;
+  final VoidCallback onPlayVideo;
 
-  // final Movie movieData;
+  const MovieBanner({
+    super.key, 
+    required this.movie, 
+    required this.movieId, 
+    required this.onPlayVideo,
+  });
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: MediaQuery
-          .of(context)
-          .size
-          .height * 0.75,
-      width: MediaQuery
-          .of(context)
-          .size
-          .width,
-
+      height: MediaQuery.of(context).size.height * 0.75,
+      width: MediaQuery.of(context).size.width,
       child: Stack(
         fit: StackFit.expand,
         children: [
-
-          // Image
           Image.network(
-            "https://m.media-amazon.com/images/M/MV5BN2YxZGRjMzYtZjE1ZC00MDI0LThjZmQtZTZmMzVmMmQ2NzBmXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
+            movie.coverImage,
             fit: BoxFit.cover,
           ),
-
-          // Top + Bottom smooth shadow
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-
                 colors: [
-                  Colors.black.withOpacity(0.9), // above
-                  Colors.transparent, // middle
+                  Colors.black.withOpacity(0.9),
                   Colors.transparent,
-                  Colors.black, // below
+                  Colors.transparent,
+                  Colors.black,
                 ],
-
-                stops: [
-                  0.02,
-                  0.25,
-                  0.55,
-                  0.85,
-                ],
+                stops: const [0.02, 0.25, 0.55, 0.85],
               ),
             ),
           ),
-
           Center(
             child: GestureDetector(
-              onTap: () {
-                //Play video
-              },
-
+              onTap: onPlayVideo,
               child: Container(
                 width: 95,
                 height: 95,
-
                 decoration: BoxDecoration(
                     color: Colors.white,
                     shape: BoxShape.circle,
-                    border: Border.all(
-                        width: 5,
-                        color: Colors.yellow
-                    )
-                ),
-
+                    border: Border.all(width: 5, color: Colors.yellow)),
                 child: Center(
                   child: Container(
                     width: 72,
                     height: 72,
-
                     decoration: const BoxDecoration(
                       color: Color(0xFFFFC107),
                       shape: BoxShape.circle,
                     ),
-
                     child: const Icon(
                       Icons.play_arrow_rounded,
                       color: Colors.white,
@@ -90,15 +71,34 @@ class MovieBanner extends StatelessWidget{
               ),
             ),
           ),
-
           Positioned(
-            right: 0,
-            top: 5,
-            child: IconButton(onPressed: () {
-              //add id to firestore
-            },
-                icon: Icon(
-                    Icons.bookmark, color: Colors.white, size: 45)),
+            right: 10,
+            top: 40,
+            child: BlocBuilder<ProfileCubit, ProfileState>(
+              builder: (context, state) {
+                final isBookmarked = context.read<ProfileCubit>().isInWishlist(movieId);
+                return IconButton(
+                  onPressed: () {
+                    context.read<ProfileCubit>().toggleWishlist(movieId);
+                  },
+                  icon: Icon(
+                    isBookmarked ? Icons.bookmark : Icons.bookmark_border,
+                    color: isBookmarked ? Colors.yellow : Colors.white,
+                    size: 40,
+                  ),
+                );
+              },
+            ),
+          ),
+          Positioned(
+            left: 10,
+            top: 40,
+            child: IconButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 35),
+            ),
           ),
           Positioned(
             bottom: 35,
@@ -107,18 +107,21 @@ class MovieBanner extends StatelessWidget{
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Movie Name", style: TextStyle(color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold),),
-                SizedBox(height: 10,),
-                Text("2002", style: TextStyle(color: Colors.grey,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),),
+                Text(
+                  movie.title,
+                  style: const TextStyle(
+                      color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  movie.year.toString(),
+                  style: const TextStyle(
+                      color: Colors.grey, fontSize: 20, fontWeight: FontWeight.bold),
+                ),
               ],
             ),
           ),
-
-
         ],
       ),
     );
