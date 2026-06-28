@@ -8,6 +8,8 @@ abstract class AuthRemoteDataSource {
       String phoneNumber, int avatar);
   Future<void> logout();
   Future<void> forgetPassword(String email);
+  Future<void> changePassword(String newPassword);
+  Future<void> deleteAccount();
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -70,6 +72,28 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<void> forgetPassword(String email) async {
     await firebaseAuth.sendPasswordResetEmail(email: email);
+  }
+
+  @override
+  Future<void> changePassword(String newPassword) async {
+    final user = firebaseAuth.currentUser;
+    if (user == null) {
+      throw Exception("No user is currently signed in");
+    }
+
+    await user.updatePassword(newPassword);
+  }
+
+  @override
+  Future<void> deleteAccount() async {
+    final user = firebaseAuth.currentUser;
+    if (user == null) {
+      throw Exception("No user is currently signed in.");
+    }
+
+    await firestore.collection("users").doc(user.uid).delete();
+
+    await user.delete();
   }
 
   @override

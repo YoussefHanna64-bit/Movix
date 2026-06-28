@@ -1,5 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movix/core/utils/firebase_error_handler.dart';
+import 'package:movix/features/auth/domain/usecases/change_password_usecase.dart';
+import 'package:movix/features/auth/domain/usecases/delete_account_usecase.dart';
 import '../../domain/usecases/register_usecase.dart';
 import '../../domain/usecases/login_usecase.dart';
 import '../../domain/usecases/logout_usecase.dart';
@@ -24,12 +26,16 @@ class AuthCubit extends Cubit<AuthState> {
   final LoginUseCase loginUseCase;
   final LogoutUseCase logoutUseCase;
   final ForgetPasswordUseCase forgetPasswordUseCase;
+  final ChangePasswordUseCase changePasswordUseCase;
+  final DeleteAccountUseCase deleteAccountUseCase;
 
   AuthCubit({
     required this.registerUseCase,
     required this.loginUseCase,
     required this.logoutUseCase,
     required this.forgetPasswordUseCase,
+    required this.changePasswordUseCase,
+    required this.deleteAccountUseCase,
   }) : super(AuthInitial());
 
   // Register method
@@ -64,6 +70,26 @@ class AuthCubit extends Cubit<AuthState> {
         password: password,
       );
       emit(AuthSuccess());
+    } catch (e) {
+      emit(AuthFailure(FirebaseErrorHandler.getReadableError(e)));
+    }
+  }
+
+  Future<void> changePassword({required String newPassword}) async {
+    emit(AuthLoading());
+    try {
+      await changePasswordUseCase.execute(newPassword);
+      emit(AuthSuccess());
+    } catch (e) {
+      emit(AuthFailure(FirebaseErrorHandler.getReadableError(e)));
+    }
+  }
+
+  Future<void> deleteAccount() async {
+    emit(AuthLoading());
+    try {
+      await deleteAccountUseCase.execute();
+      emit(AuthInitial());
     } catch (e) {
       emit(AuthFailure(FirebaseErrorHandler.getReadableError(e)));
     }

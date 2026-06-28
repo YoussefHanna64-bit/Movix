@@ -47,11 +47,35 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<void> changePassword(String newPassword) async {
+    try {
+      await remoteDataSource.changePassword(newPassword);
+    } on FirebaseAuthException catch (e) {
+      throw Exception(e.message ?? "Failed to change password");
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  @override
+  Future<void> deleteAccount() async {
+    try {
+      await remoteDataSource.deleteAccount();
+    } on FirebaseAuthException catch (e) {
+      throw Exception(e.message ?? "Failed to delete account");
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  @override
   Future<void> logout() async {
     try {
       await remoteDataSource.logout();
+    } on FirebaseAuthException catch (e) {
+      throw Exception(e.message ?? "Failed to logout");
     } catch (e) {
-      throw Exception('Failed to logout');
+      throw Exception(e.toString());
     }
   }
 }

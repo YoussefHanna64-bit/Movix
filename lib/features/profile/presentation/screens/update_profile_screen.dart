@@ -40,7 +40,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF121312),
+      backgroundColor: AppColors.black,
       appBar: AppBar(
         iconTheme: const IconThemeData(color: AppColors.yellow),
         centerTitle: true,

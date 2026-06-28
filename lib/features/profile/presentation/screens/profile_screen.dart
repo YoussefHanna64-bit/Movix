@@ -36,7 +36,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: DefaultTabController(
         length: 2,
         child: Scaffold(
-          backgroundColor: const Color(0xFF212121),
+          backgroundColor: AppColors.black,
           body: BlocBuilder<ProfileCubit, ProfileState>(
               builder: (context, state) {
             if (state is ProfileLoading || state is ProfileInitial) {

@@ -6,4 +6,6 @@ abstract class AuthRepository {
       String phoneNumber, int avatar);
   Future<void> logout();
   Future<void> forgetPassword(String email);
+  Future<void> changePassword(String newPassword);
+  Future<void> deleteAccount();
 }

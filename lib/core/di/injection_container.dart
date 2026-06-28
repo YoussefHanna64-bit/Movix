@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
+import 'package:movix/features/auth/domain/usecases/change_password_usecase.dart';
+import 'package:movix/features/auth/domain/usecases/delete_account_usecase.dart';
 import 'package:movix/features/profile/data/datasources/profile_remote_data_source.dart';
 import 'package:movix/features/profile/data/repositories/profile_repository_impl.dart';
 import 'package:movix/features/profile/domain/repositories/profile_repository.dart';
@@ -40,12 +42,16 @@ Future<void> init() async {
   sl.registerLazySingleton(() => LoginUseCase(sl()));
   sl.registerLazySingleton(() => LogoutUseCase(sl()));
   sl.registerLazySingleton(() => ForgetPasswordUseCase(sl()));
+  sl.registerLazySingleton(() => ChangePasswordUseCase(sl()));
+  sl.registerLazySingleton(() => DeleteAccountUseCase(sl()));
 
   sl.registerFactory(() => AuthCubit(
         registerUseCase: sl(),
         loginUseCase: sl(),
         logoutUseCase: sl(),
         forgetPasswordUseCase: sl(),
+        changePasswordUseCase: sl(),
+        deleteAccountUseCase: sl(),
       ));
 
   // Home
