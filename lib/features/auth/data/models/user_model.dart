@@ -18,13 +18,8 @@ class UserModel extends UserEntity {
       email: map['email'] ?? '',
       avatar: map['avatar'] ?? 1,
       phoneNumber: map['phoneNumber'] ?? '',
-      // Safely casting dynamic lists to List<String>
-      wishList: map['wishList'] == null
-          ? null
-          : List<String>.from(map['wishList'] ?? []),
-      history: map['history'] == null
-          ? null
-          : List<String>.from(map['history'] ?? []),
+      wishList: (map['wishList'] as List<dynamic>?)?.map((e) => e.toString()).toList(),
+      history: (map['history'] as List<dynamic>?)?.map((e) => e.toString()).toList(),
     );
   }
 
