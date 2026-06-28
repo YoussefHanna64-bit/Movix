@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movix/core/theme/app_colors.dart';
+import 'package:movix/core/widgets/app_button.dart';
 import 'package:movix/core/widgets/app_text_field.dart';
 import 'package:movix/core/widgets/avatar_picker.dart';
+import 'package:movix/core/widgets/confirm_dialog.dart';
+import 'package:movix/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:movix/features/profile/presentation/cubit/profile_cubit.dart';
 import 'package:movix/features/profile/presentation/cubit/profile_state.dart';
+import 'package:movix/features/profile/presentation/widgets/change_password_section.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({super.key});
@@ -37,6 +41,19 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     super.dispose();
   }
 
+  Future<void> _deleteAccount() async {
+    final confirmed = await ConfirmDialog.show(
+      context,
+      title: "Delete Account",
+      message:
+          "Are you sure you want to delete your account? This action cannot be undone",
+      confirmLabel: "Delete",
+    );
+    if (confirmed && mounted) {
+      await context.read<AuthCubit>().deleteAccount();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,73 +66,74 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const SizedBox(height: 20),
-              AvatarPicker(
-                selectedAvatar: _selectedAvatar,
-                onAvatarSelected: (index) {
-                  setState(() => _selectedAvatar = index);
-                },
-              ),
-              const SizedBox(height: 30),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  children: [
-                    AppTextField(
-                      controller: _nameController,
-                      hintText: "Name",
-                      prefixIcon: Icons.badge_outlined,
-                    ),
-                    const SizedBox(height: 15),
-                    AppTextField(
-                      controller: _phoneController,
-                      hintText: "Phone Number",
-                      prefixIcon: Icons.phone,
-                      keyboardType: TextInputType.phone,
-                    ),
-                    const SizedBox(height: 30),
-                    BlocConsumer<ProfileCubit, ProfileState>(
-                      listener: (context, state) {
-                        if (state is ProfileLoaded) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text("Profile updated successfully")),
-                          );
-                          Navigator.pop(context);
-                        } else if (state is ProfileError) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(state.message)),
-                          );
-                        }
-                      },
-                      builder: (context, state) {
-                        if (state is ProfileLoading) {
-                          return const ElevatedButton(
-                            onPressed: null,
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                        return ElevatedButton(
-                          onPressed: () {
-                            if (_nameController.text.isNotEmpty &&
-                                _phoneController.text.isNotEmpty) {
-                              context.read<ProfileCubit>().updateProfile(
-                                    newName: _nameController.text,
-                                    newAvatar: _selectedAvatar,
-                                    phoneNumber: _phoneController.text,
-                                  );
-                            }
-                          },
-                          child: const Text("Save"),
-                        );
-                      },
-                    ),
-                  ],
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              children: [
+                const SizedBox(height: 20),
+                AvatarPicker(
+                  selectedAvatar: _selectedAvatar,
+                  onAvatarSelected: (index) {
+                    setState(() => _selectedAvatar = index);
+                  },
                 ),
-              ),
-            ],
+                const SizedBox(height: 30),
+                AppTextField(
+                  controller: _nameController,
+                  hintText: "Name",
+                  prefixIcon: Icons.badge_outlined,
+                ),
+                const SizedBox(height: 15),
+                AppTextField(
+                  controller: _phoneController,
+                  hintText: "Phone Number",
+                  prefixIcon: Icons.phone,
+                  keyboardType: TextInputType.phone,
+                ),
+                const SizedBox(height: 30),
+                BlocConsumer<ProfileCubit, ProfileState>(
+                  listener: (context, state) {
+                    if (state is ProfileLoaded) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content: Text("Profile updated successfully")),
+                      );
+                      Navigator.pop(context);
+                    } else if (state is ProfileError) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(state.message)),
+                      );
+                    }
+                  },
+                  builder: (context, state) {
+                    return AppButton(
+                      label: "Save",
+                      onPressed: () {
+                        if (_nameController.text.isNotEmpty &&
+                            _phoneController.text.isNotEmpty) {
+                          context.read<ProfileCubit>().updateProfile(
+                                newName: _nameController.text,
+                                newAvatar: _selectedAvatar,
+                                phoneNumber: _phoneController.text,
+                              );
+                        }
+                      },
+                      isLoading: state is ProfileLoading,
+                    );
+                  },
+                ),
+                const SizedBox(height: 20),
+                const Divider(color: Colors.white24),
+                const SizedBox(height: 20),
+                const ChangePasswordSection(),
+                const SizedBox(height: 60),
+                AppButton.danger(
+                  label: "Delete Account",
+                  onPressed: _deleteAccount,
+                ),
+                const SizedBox(height: 40),
+              ],
+            ),
           ),
         ),
       ),
