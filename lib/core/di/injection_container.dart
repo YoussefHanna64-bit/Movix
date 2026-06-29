@@ -29,6 +29,8 @@ import '../../features/home/data/datasource/home_remote_data_source.dart';
 import '../../features/home/data/repositories/home_repository_impl.dart';
 import '../../features/home/domain/repositories/home_repository.dart';
 import '../../features/home/domain/usecases/get_action_movies_usecase.dart';
+import '../../features/profile/domain/usecases/get_movie_by_id_usecase.dart';
+import '../../features/profile/domain/usecases/get_movies_by_ids_usecase.dart';
 import '../../features/home/domain/usecases/get_movies_usecase.dart';
 import '../../features/home/presentation/cubit/home_cubit.dart';
 
@@ -67,6 +69,8 @@ Future<void> init() async {
 
   sl.registerLazySingleton(() => GetMoviesUseCase(sl()));
   sl.registerLazySingleton(() => GetActionMoviesUseCase(sl()));
+  sl.registerLazySingleton(() => GetMovieByIdUseCase(sl()));
+  sl.registerLazySingleton(() => GetMoviesByIdsUseCase(sl()));
 
   sl.registerLazySingleton<HomeRepository>(
       () => HomeRepositoryImpl(remoteDataSource: sl()));
@@ -90,8 +94,9 @@ Future<void> init() async {
   // Core
   sl.registerLazySingleton(() => DioClient());
 
-  sl.registerLazySingleton<ProfileRemoteDataSource>(
-      () => ProfileRemoteDataSourceImpl(firestore: sl(), firebaseAuth: sl()));
+  sl.registerLazySingleton<ProfileRemoteDataSource>(() =>
+      ProfileRemoteDataSourceImpl(
+          firestore: sl(), firebaseAuth: sl(), dioClient: sl()));
 
   sl.registerLazySingleton<ProfileRepository>(
       () => ProfileRepositoryImpl(remoteDataSource: sl()));
@@ -106,6 +111,7 @@ Future<void> init() async {
         updateUserProfileUseCase: sl(),
         toggleWishlistUseCase: sl(),
         addToHistoryUseCase: sl(),
+        getMovieByIdUseCase: sl(),
+        getMoviesByIdsUseCase: sl(),
       ));
 }
-

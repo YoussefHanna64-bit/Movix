@@ -8,6 +8,7 @@ import 'package:movix/features/profile/presentation/cubit/profile_cubit.dart';
 import 'package:movix/features/profile/presentation/cubit/profile_state.dart';
 import 'package:movix/features/profile/presentation/widgets/profile_actions.dart';
 import 'package:movix/features/profile/presentation/widgets/profile_header.dart';
+import 'package:movix/features/profile/presentation/widgets/profile_movie_list.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -54,7 +55,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               );
             }
             if (state is ProfileLoaded) {
-              final user = state.user;
+              final profileState = state;
+              final user = profileState.user;
               return SafeArea(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -92,20 +94,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ],
                       ),
-                      const Expanded(
+                      Expanded(
                         child: TabBarView(
                           children: [
-                            Center(
-                              child: Text(
-                                "Watch List",
-                                style: TextStyle(color: Colors.white),
-                              ),
+                            ProfileMovieList(
+                              movies: profileState.wishlistMovies,
+                              emptyLabel: "Your watchlist is empty",
+                              emptyIcon: Icons.bookmark_border,
                             ),
-                            Center(
-                              child: Text(
-                                "History",
-                                style: TextStyle(color: Colors.white),
-                              ),
+                            ProfileMovieList(
+                              movies: profileState.historyMovies,
+                              emptyLabel: "No watch history yet",
+                              emptyIcon: Icons.history,
                             ),
                           ],
                         ),

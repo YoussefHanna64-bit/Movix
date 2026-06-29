@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:movix/core/network/network_exceptions.dart';
 import 'package:movix/features/auth/domain/entities/user_entity.dart';
+import 'package:movix/features/home/domain/entities/movie_entity.dart';
 import 'package:movix/features/profile/data/datasources/profile_remote_data_source.dart';
 import 'package:movix/features/profile/domain/repositories/profile_repository.dart';
 
@@ -53,6 +55,24 @@ class ProfileRepositoryImpl implements ProfileRepository {
       throw Exception("Failed to add to the history: ${e.message}");
     } catch (e) {
       throw Exception("Failed to add to the history: ${e.toString()}");
+    }
+  }
+
+  @override
+  Future<MovieEntity> getMovieById(int id) async {
+    try {
+      return await remoteDataSource.getMovieById(id);
+    } catch (e) {
+      throw Exception(NetworkExceptions.getErrorMessage(e));
+    }
+  }
+
+  @override
+  Future<List<MovieEntity>> getMoviesByIds(List<int> ids) async {
+    try {
+      return await remoteDataSource.getMoviesByIds(ids);
+    } catch (e) {
+      throw Exception(NetworkExceptions.getErrorMessage(e));
     }
   }
 }
