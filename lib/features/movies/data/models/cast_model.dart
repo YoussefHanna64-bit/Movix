@@ -4,9 +4,9 @@ class CastModel extends CastEntity{
   CastModel({required super.castImage, required super.castName, required super.castCharacter});
   factory CastModel.fromJson(Map<String, dynamic> json){
     return CastModel(
-      castImage: json['url_small_image'],
-      castName: json['name'],
-      castCharacter: json['character_name'],
+      castImage: json['url_small_image'] ?? '',
+      castName: json['name'] ?? '',
+      castCharacter: json['character_name'] ?? '',
     );
   }
 

@@ -10,6 +10,7 @@ import 'package:movix/features/movies/presentation/widgets/movieBanner.dart';
 import 'package:movix/features/movies/presentation/widgets/screenShots.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../profile/presentation/cubit/profile_cubit.dart';
 import '../widgets/statCard.dart';
 
 class MovieDetailsScreen extends StatefulWidget {
@@ -30,6 +31,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
       movieId = ModalRoute.of(context)?.settings.arguments as int?;
       if (movieId != null) {
         context.read<MoviesCubit>().loadMovieDetails(movieId!);
+        context.read<ProfileCubit>().addMovieToHistory(movieId!);
       }
     }
   }
