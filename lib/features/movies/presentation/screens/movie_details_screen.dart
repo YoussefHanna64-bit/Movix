@@ -46,7 +46,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
 
     final videoID = ytTrailerCode.trim();
     final url = Uri.parse("https://www.youtube.com/watch?v=$videoID");
-    
+
     try {
       if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -238,6 +238,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                                     title: "",
                                     rating: movieDetail!
                                         .similarMovies[index].rating,
+                                    year: movieDetail!.year,
                                     backgroundImage: movieDetail!
                                         .similarMovies[index].coverImg,
                                     coverImage: movieDetail!

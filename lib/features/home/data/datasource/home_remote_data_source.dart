@@ -5,6 +5,7 @@ import '../models/movie_model.dart';
 abstract class HomeRemoteDataSource {
   Future<List<MovieModel>> getMovies();
   Future<List<MovieModel>> getActionMovies();
+  Future<List<MovieModel>> getNextPage({required int page});
 }
 
 class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
@@ -15,7 +16,7 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   @override
   Future<List<MovieModel>> getMovies() async {
     final response = await dioClient.get(ApiConstants.listMovies);
-    
+
     if (response.data != null && response.data['data'] != null && response.data['data']['movies'] != null) {
       final List moviesList = response.data['data']['movies'];
       return moviesList.map((movie) => MovieModel.fromJson(movie)).toList();
@@ -33,6 +34,22 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
     if (response.data != null && response.data['data'] != null && response.data['data']['movies'] != null) {
       final List moviesList = response.data['data']['movies'];
       return moviesList.map((movie) => MovieModel.fromJson(movie)).toList();
+    }
+    return [];
+  }
+
+  @override
+  Future<List<MovieModel>> getNextPage({required int page}) async {
+    final response = await dioClient.get(
+      ApiConstants.listMovies,
+      queryParameters: {"page": page},
+    );
+
+    if (response.data != null &&
+        response.data["data"] != null &&
+        response.data["data"]["movies"] != null) {
+      final List movies = response.data["data"]["movies"];
+      return movies.map((movie) => MovieModel.fromJson(movie)).toList();
     }
     return [];
   }

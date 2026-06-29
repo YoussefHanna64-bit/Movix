@@ -16,10 +16,26 @@ class BrowseScreen extends StatefulWidget {
 class _BrowseScreenState extends State<BrowseScreen> {
   final TextEditingController textEditingControllerSearch =
       TextEditingController();
+  final ScrollController scrollController = ScrollController();
+
+  void onScroll() {
+    if (scrollController.position.pixels >=
+        scrollController.position.maxScrollExtent) {
+      context.read<HomeCubit>().loadNextPage();
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    scrollController.addListener(onScroll);
+  }
 
   @override
   void dispose() {
     textEditingControllerSearch.dispose();
+    scrollController.removeListener(onScroll);
+    scrollController.dispose();
     super.dispose();
   }
 
@@ -150,6 +166,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
                       ? const Text("There are no movies that match your search")
                       : Expanded(
                           child: GridView.builder(
+                          controller: scrollController,
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 3,
