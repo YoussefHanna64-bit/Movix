@@ -4,6 +4,8 @@ import 'package:movix/core/routes/app_routes.dart';
 import 'package:movix/core/widgets/app_text_field.dart';
 import 'package:movix/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:movix/features/auth/presentation/screens/forget_password_screen.dart';
+import 'package:movix/features/profile/presentation/cubit/profile_cubit.dart';
+import 'package:movix/core/theme/app_colors.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -50,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: const Color(0xFF121312),
+        backgroundColor: AppColors.black,
         body: SafeArea(
             child: SingleChildScrollView(
                 child: Column(
@@ -102,9 +104,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: const Text(
                           "Forgot Password?",
                           style: TextStyle(
-                            color: Color(0xFFF6BD00),
+                            color: AppColors.yellow,
                             decoration: TextDecoration.underline,
-                            decorationColor: Color(0xFFF6BD00),
+                            decorationColor: AppColors.yellow,
                           ),
                         ),
                       ),
@@ -113,6 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     BlocConsumer<AuthCubit, AuthState>(
                       listener: (context, state) {
                         if (state is AuthSuccess) {
+                          context.read<ProfileCubit>().loadProfile();
                           Navigator.pushReplacementNamed(
                               context, AppRoutes.layout);
                         } else if (state is AuthFailure) {
@@ -126,8 +129,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           return ElevatedButton(
                             onPressed: () {},
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFFF6BD00),
-                              foregroundColor: Colors.black,
+                              backgroundColor: AppColors.yellow,
+                              foregroundColor: AppColors.black,
                               minimumSize: const Size(double.infinity, 50),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
@@ -146,8 +149,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             }
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFFF6BD00),
-                            foregroundColor: Colors.black,
+                            backgroundColor: AppColors.yellow,
+                            foregroundColor: AppColors.black,
                             minimumSize: const Size(double.infinity, 50),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
@@ -167,7 +170,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: [
                         const Text(
                           "Don't have an account? ",
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: AppColors.textPrimary),
                         ),
                         GestureDetector(
                           onTap: () {
@@ -177,7 +180,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: const Text(
                             "Sign Up",
                             style: TextStyle(
-                              color: Color(0xFFF6BD00),
+                              color: AppColors.yellow,
                               fontWeight: FontWeight.bold,
                             ),
                           ),

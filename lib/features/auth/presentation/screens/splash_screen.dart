@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movix/features/auth/presentation/screens/login_screen.dart';
+import 'package:movix/core/theme/app_colors.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -25,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF121312),
+      backgroundColor: AppColors.black,
       body: Center(
         child: Image.asset(
           "lib/features/auth/images/logoimage.png",

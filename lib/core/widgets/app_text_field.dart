@@ -27,7 +27,7 @@ class AppTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      style: const TextStyle(color: Colors.white),
+      style: const TextStyle(color: AppColors.textPrimary),
       obscureText: obscureText,
       keyboardType: keyboardType,
       validator: validator,
@@ -36,18 +36,18 @@ class AppTextField extends StatelessWidget {
       decoration: InputDecoration(
         filled: true,
         fillColor: AppColors.grey,
-        prefixIcon: Icon(prefixIcon, color: Colors.white),
+        prefixIcon: Icon(prefixIcon, color: AppColors.textPrimary),
         suffixIcon: onToggleObscure != null
             ? IconButton(
                 icon: Icon(
                   obscureText ? Icons.visibility_off : Icons.visibility,
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                 ),
                 onPressed: onToggleObscure,
               )
             : null,
         hintText: hintText,
-        hintStyle: const TextStyle(color: Colors.white70),
+        hintStyle: const TextStyle(color: AppColors.textSecondary),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide.none,

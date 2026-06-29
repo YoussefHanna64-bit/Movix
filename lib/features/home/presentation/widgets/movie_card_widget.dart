@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movix/core/routes/app_routes.dart';
 import 'package:movix/features/home/domain/entities/movie_entity.dart';
+import 'package:movix/core/theme/app_colors.dart';
 
 class MovieCardWidget extends StatelessWidget {
   final MovieEntity movie;
@@ -42,7 +43,7 @@ class MovieCardWidget extends StatelessWidget {
                 height: 30,
                 decoration: BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  color: const Color(0xff121312).withValues(alpha: 0.71),
+                  color: AppColors.black.withValues(alpha: 0.71),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -50,14 +51,14 @@ class MovieCardWidget extends StatelessWidget {
                     Text(
                       movie.rating.toStringAsFixed(1),
                       style: const TextStyle(
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                         fontSize: 16,
                         fontWeight: FontWeight.w400,
                       ),
                     ),
                     const Icon(
                       Icons.star,
-                      color: Colors.yellow,
+                      color: AppColors.yellow,
                       size: 20,
                     )
                   ],
@@ -71,7 +72,7 @@ class MovieCardWidget extends StatelessWidget {
                 height: 30,
                 decoration: BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  color: const Color(0xff121312).withValues(alpha: 0.71),
+                  color: AppColors.black.withValues(alpha: 0.71),
                 ),
                 child: Center(child: Text(movie.year.toString())),
               ),

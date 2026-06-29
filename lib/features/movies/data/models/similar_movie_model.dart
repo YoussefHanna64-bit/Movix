@@ -1,4 +1,4 @@
-import 'package:movix/features/movies/domain/entities/similarMovie_entity.dart';
+import 'package:movix/features/movies/domain/entities/similar_movie_entity.dart';
 
 class SimilarMovieModel extends SimilarMoviesEntity{
   const SimilarMovieModel({required super.id, required super.rating, required super.coverImg});

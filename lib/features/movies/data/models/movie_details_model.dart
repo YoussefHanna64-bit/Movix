@@ -1,9 +1,10 @@
+import 'package:movix/core/error/failure.dart';
 import 'package:movix/features/movies/data/models/cast_model.dart';
-import 'package:movix/features/movies/domain/entities/movieDetails_entity.dart';
-import 'package:movix/features/movies/domain/entities/similarMovie_entity.dart';
+import 'package:movix/features/movies/domain/entities/movie_details_entity.dart';
+import 'package:movix/features/movies/domain/entities/similar_movie_entity.dart';
 
-class MoviedetailsModel extends MovieDetailsEntity {
-  const MoviedetailsModel({
+class MovieDetailsModel extends MovieDetailsEntity {
+  const MovieDetailsModel({
     required super.title,
     required super.year,
     required super.likeCount,
@@ -18,12 +19,12 @@ class MoviedetailsModel extends MovieDetailsEntity {
     required super.ytTrailerCode,
   });
 
-  factory MoviedetailsModel.fromJson(
+  factory MovieDetailsModel.fromJson(
     Map<String, dynamic> json,
     List<SimilarMoviesEntity> similarMovies,
   ) {
     try {
-      return MoviedetailsModel(
+      return MovieDetailsModel(
         title: json['title'] as String? ?? 'Unknown',
         year: json['year'] as int? ?? 0,
         likeCount: json['like_count'] as int? ?? 0,
@@ -51,7 +52,7 @@ class MoviedetailsModel extends MovieDetailsEntity {
         similarMovies: similarMovies,
       );
     } catch (e) {
-      throw Exception("Failed to parse movie details: $e");
+      throw Failure("Failed to parse movie details: $e");
     }
   }
 }

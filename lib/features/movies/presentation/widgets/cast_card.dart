@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../domain/entities/cast_entity.dart';
+import 'package:movix/core/theme/app_colors.dart';
 
 class CastCard extends StatelessWidget{
   final CastEntity cast;
@@ -12,7 +12,7 @@ class CastCard extends StatelessWidget{
       height: 95,
       decoration: BoxDecoration(
         borderRadius: BorderRadiusGeometry.circular(15),
-        color: Colors.grey,
+        color: AppColors.grey,
     
       ),
       child: Padding(
@@ -30,8 +30,8 @@ class CastCard extends StatelessWidget{
                   return Container(
                     width: 80.0,
                     height: 80.0,
-                    color: Colors.grey[800],
-                    child: const Icon(Icons.person, color: Colors.white , size: 50,),
+                    color: AppColors.grey,
+                    child: const Icon(Icons.person, color: AppColors.textPrimary , size: 50,),
                   );
                 },
               ),

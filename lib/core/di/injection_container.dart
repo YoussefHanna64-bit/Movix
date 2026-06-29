@@ -1,7 +1,7 @@
 import 'package:movix/features/home/domain/usecases/get_next_page_use_case.dart';
-import 'package:movix/features/movies/data/datasources/movieDetails_remote_data_source.dart';
-import 'package:movix/features/movies/data/repositories/movieDetails_repository_impl.dart';
-import 'package:movix/features/movies/domain/repositories/movieDetails_repository.dart';
+import 'package:movix/features/movies/data/datasources/movie_details_remote_data_source.dart';
+import 'package:movix/features/movies/data/repositories/movie_details_repository_impl.dart';
+import 'package:movix/features/movies/domain/repositories/movie_details_repository.dart';
 import 'package:movix/features/movies/domain/usecases/get_movie_details_usecase.dart';
 import 'package:movix/features/movies/presentation/cubit/movies_cubit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -17,6 +17,11 @@ import 'package:movix/features/profile/domain/usecases/get_user_profile_usecase.
 import 'package:movix/features/profile/domain/usecases/toggle_wishlist_usecase.dart';
 import 'package:movix/features/profile/domain/usecases/update_user_profile_usecase.dart';
 import 'package:movix/features/profile/presentation/cubit/profile_cubit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:movix/core/domain/repositories/app_state_repository.dart';
+import 'package:movix/core/data/repositories/app_state_repository_impl.dart';
+import 'package:movix/core/domain/usecases/check_app_state_usecase.dart';
+import 'package:movix/core/domain/usecases/set_onboarding_seen_usecase.dart';
 import '../network/dio_client.dart';
 import '../../features/auth/data/datasources/auth_remote_data_source.dart';
 import '../../features/auth/data/repositories/auth_repository_impl.dart';
@@ -40,6 +45,15 @@ final sl = GetIt.instance;
 Future<void> init() async {
   sl.registerLazySingleton(() => FirebaseAuth.instance);
   sl.registerLazySingleton(() => FirebaseFirestore.instance);
+
+  final sharedPreferences = await SharedPreferences.getInstance();
+  sl.registerLazySingleton(() => sharedPreferences);
+
+  sl.registerLazySingleton<AppStateRepository>(
+      () => AppStateRepositoryImpl(firebaseAuth: sl(), sharedPreferences: sl()));
+
+  sl.registerLazySingleton(() => CheckAppStateUseCase(sl()));
+  sl.registerLazySingleton(() => SetOnboardingSeenUseCase(sl()));
 
   sl.registerLazySingleton<AuthRemoteDataSource>(
       () => AuthRemoteDataSourceImpl(firebaseAuth: sl(), firestore: sl()));
@@ -88,11 +102,11 @@ Future<void> init() async {
 
   sl.registerLazySingleton(() => GetMovieDetailsUseCase(sl()));
 
-  sl.registerLazySingleton<MoviedetailsRepository>(
+  sl.registerLazySingleton<MovieDetailsRepository>(
       () => MovieDetailsRepositoryImpl(remoteDataSource: sl()));
 
-  sl.registerLazySingleton<MoviedetailsRemoteDataSource>(
-      () => MoviedetailsRemoteDataSourceImpl(dioClient: sl()));
+  sl.registerLazySingleton<MovieDetailsRemoteDataSource>(
+      () => MovieDetailsRemoteDataSourceImpl(dioClient: sl()));
 
   // Core
   sl.registerLazySingleton(() => DioClient());

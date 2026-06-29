@@ -123,7 +123,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                   },
                 ),
                 const SizedBox(height: 20),
-                const Divider(color: Colors.white24),
+                const Divider(color: AppColors.dividerColor),
                 const SizedBox(height: 20),
                 const ChangePasswordSection(),
                 const SizedBox(height: 60),

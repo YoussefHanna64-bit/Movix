@@ -1,8 +1,8 @@
 import 'package:movix/features/home/domain/entities/movie_entity.dart';
-import 'package:movix/features/profile/domain/repositories/profile_repository.dart';
+import 'package:movix/features/home/domain/repositories/home_repository.dart';
 
 class GetMoviesByIdsUseCase {
-  final ProfileRepository repository;
+  final HomeRepository repository;
 
   GetMoviesByIdsUseCase(this.repository);
 

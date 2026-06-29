@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movix/core/utils/firebase_error_handler.dart';
-import 'package:movix/features/home/domain/entities/movie_entity.dart';
 import 'package:movix/features/profile/domain/usecases/get_movie_by_id_usecase.dart';
 import 'package:movix/features/profile/domain/usecases/get_movies_by_ids_usecase.dart';
 import 'package:movix/features/profile/domain/usecases/add_to_history_usecase.dart';
@@ -31,8 +30,10 @@ class ProfileCubit extends Cubit<ProfileState> {
     try {
       final user = await getUserProfileUseCase.execute();
 
-      final wishlistIds = (user.wishList ?? []).map(int.parse).toList();
-      final historyIds = (user.history ?? []).map(int.parse).toList();
+      final wishlistIds =
+          (user.wishList ?? []).map(int.tryParse).whereType<int>().toList();
+      final historyIds =
+          (user.history ?? []).map(int.tryParse).whereType<int>().toList();
 
       final results = await Future.wait([
         getMoviesByIdsUseCase.execute(wishlistIds),
@@ -96,12 +97,11 @@ class ProfileCubit extends Cubit<ProfileState> {
     final currentState = state as ProfileLoaded;
     final currentUser = currentState.user;
     final isInList = isInWishlist(movieId);
-    var updatedMovies = List<MovieEntity>.from(currentState.wishlistMovies);
     final updatedWishList = List<String>.from(currentUser.wishList ?? []);
 
     if (isInList) {
       updatedWishList.remove(movieId.toString());
-      updatedMovies.removeWhere((m) => m.id == movieId);
+      final updatedMovies = currentState.wishlistMovies.where((m) => m.id != movieId).toList();
 
       final updatedUser = currentUser.copyWith(wishList: updatedWishList);
       emit(ProfileLoaded(updatedUser,
@@ -112,18 +112,18 @@ class ProfileCubit extends Cubit<ProfileState> {
 
       final updatedUser = currentUser.copyWith(wishList: updatedWishList);
       emit(ProfileLoaded(updatedUser,
-          wishlistMovies: updatedMovies,
+          wishlistMovies: currentState.wishlistMovies,
           historyMovies: currentState.historyMovies));
       try {
         final movie = await getMovieByIdUseCase.execute(movieId);
-        updatedMovies.add(movie);
-      } catch (e) {}
+        final updatedMovies = [...currentState.wishlistMovies, movie];
+        emit(ProfileLoaded(updatedUser,
+            wishlistMovies: updatedMovies,
+            historyMovies: currentState.historyMovies));
+      } catch (e) {
+        print('Failed to fetch movie $movieId for wishlist: $e');
+      }
     }
-
-    final updatedUser = currentUser.copyWith(wishList: updatedWishList);
-    emit(ProfileLoaded(updatedUser,
-        wishlistMovies: updatedMovies,
-        historyMovies: currentState.historyMovies));
 
     try {
       await toggleWishlistUseCase.execute(
@@ -148,19 +148,23 @@ class ProfileCubit extends Cubit<ProfileState> {
       return;
     }
 
-    var updatedMovies = List<MovieEntity>.from(currentState.historyMovies);
     final updatedHistory = List<String>.from(currentUser.history ?? []);
     updatedHistory.add(movieId.toString());
-
-    try {
-      final movie = await getMovieByIdUseCase.execute(movieId);
-      updatedMovies.add(movie);
-    } catch (e) {}
 
     final updatedUser = currentUser.copyWith(history: updatedHistory);
     emit(ProfileLoaded(updatedUser,
         wishlistMovies: currentState.wishlistMovies,
-        historyMovies: updatedMovies));
+        historyMovies: currentState.historyMovies));
+
+    try {
+      final movie = await getMovieByIdUseCase.execute(movieId);
+      final updatedMovies = [...currentState.historyMovies, movie];
+      emit(ProfileLoaded(updatedUser,
+          wishlistMovies: currentState.wishlistMovies,
+          historyMovies: updatedMovies));
+    } catch (e) {
+      print('Failed to fetch movie $movieId for history: $e');
+    }
 
     try {
       await addToHistoryUseCase.execute(movieId);

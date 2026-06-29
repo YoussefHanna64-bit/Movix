@@ -1,3 +1,4 @@
+import 'package:movix/core/error/failure.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/user_model.dart';
@@ -37,7 +38,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     if (docSnapshot.exists && docSnapshot.data() != null) {
       return UserModel.fromMap(docSnapshot.data()!);
     } else {
-      throw Exception('User data not found in the database.');
+      throw const Failure('User data not found in the database.');
     }
   }
 
@@ -78,7 +79,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<void> changePassword(String newPassword) async {
     final user = firebaseAuth.currentUser;
     if (user == null) {
-      throw Exception("No user is currently signed in");
+      throw const Failure("No user is currently signed in");
     }
 
     await user.updatePassword(newPassword);
@@ -88,12 +89,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<void> deleteAccount() async {
     final user = firebaseAuth.currentUser;
     if (user == null) {
-      throw Exception("No user is currently signed in.");
+      throw const Failure("No user is currently signed in.");
     }
 
-    await firestore.collection("users").doc(user.uid).delete();
-
+    final uid = user.uid;
     await user.delete();
+    await firestore.collection("users").doc(uid).delete();
   }
 
   @override

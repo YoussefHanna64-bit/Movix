@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:movix/core/theme/app_colors.dart';
 
 class StatCard extends StatelessWidget {
   final IconData icon;
@@ -10,18 +10,18 @@ class StatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 5),
+      padding: const EdgeInsets.symmetric(vertical: 5),
       width: MediaQuery.of(context).size.width*0.30,
       decoration: BoxDecoration(
-        color: Colors.grey,
+        color: AppColors.grey,
         borderRadius: BorderRadiusGeometry.circular(10),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon ,color: Colors.yellow, size: 40,),
-          SizedBox(width: 8,),
-          Text(statName , style: TextStyle(color: Colors.white , fontSize: 24 , fontWeight: FontWeight.bold),)
+          Icon(icon ,color: AppColors.yellow, size: 40,),
+          const SizedBox(width: 8,),
+          Text(statName , style: const TextStyle(color: AppColors.textPrimary , fontSize: 24 , fontWeight: FontWeight.bold),)
         ],
       ),
     );

@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => di.sl<AuthCubit>()),
         BlocProvider(create: (_) => di.sl<HomeCubit>()..loadHome()),
-        BlocProvider(create: (_) => di.sl<ProfileCubit>()..loadProfile()),
+        BlocProvider(create: (_) => di.sl<ProfileCubit>()),
       ],
 
       child: MaterialApp(

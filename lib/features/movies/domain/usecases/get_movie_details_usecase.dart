@@ -1,8 +1,8 @@
-import 'package:movix/features/movies/domain/entities/movieDetails_entity.dart';
-import 'package:movix/features/movies/domain/repositories/movieDetails_repository.dart';
+import 'package:movix/features/movies/domain/entities/movie_details_entity.dart';
+import 'package:movix/features/movies/domain/repositories/movie_details_repository.dart';
 
 class GetMovieDetailsUseCase {
-  final MoviedetailsRepository repository;
+  final MovieDetailsRepository repository;
 
   GetMovieDetailsUseCase(this.repository);
 

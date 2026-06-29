@@ -1,4 +1,6 @@
+import 'package:movix/core/error/failure.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:movix/core/utils/firebase_error_handler.dart';
 import '../../domain/entities/user_entity.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../datasources/auth_remote_data_source.dart';
@@ -14,9 +16,9 @@ class AuthRepositoryImpl implements AuthRepository {
       final userModel = await remoteDataSource.login(email, password);
       return userModel;
     } on FirebaseAuthException catch (e) {
-      throw Exception(e.message ?? 'Authentication failed');
+      throw Failure(FirebaseErrorHandler.getReadableError(e));
     } catch (e) {
-      throw Exception(e.toString());
+      throw Failure(e.toString());
     }
   }
 
@@ -28,9 +30,9 @@ class AuthRepositoryImpl implements AuthRepository {
           name, email, password, phoneNumber, avatar);
       return userModel;
     } on FirebaseAuthException catch (e) {
-      throw Exception(e.message ?? 'Registration failed');
+      throw Failure(FirebaseErrorHandler.getReadableError(e));
     } catch (e) {
-      throw Exception(e.toString());
+      throw Failure(e.toString());
     }
   }
 
@@ -40,9 +42,9 @@ class AuthRepositoryImpl implements AuthRepository {
       await remoteDataSource.forgetPassword(email);
     } on FirebaseAuthException catch (e) {
       // You can customize these error messages based on e.code
-      throw Exception(e.message ?? 'Failed to send password reset email.');
+      throw Failure(FirebaseErrorHandler.getReadableError(e));
     } catch (e) {
-      throw Exception(e.toString());
+      throw Failure(e.toString());
     }
   }
 
@@ -51,9 +53,9 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       await remoteDataSource.changePassword(newPassword);
     } on FirebaseAuthException catch (e) {
-      throw Exception(e.message ?? "Failed to change password");
+      throw Failure(FirebaseErrorHandler.getReadableError(e));
     } catch (e) {
-      throw Exception(e.toString());
+      throw Failure(e.toString());
     }
   }
 
@@ -62,9 +64,9 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       await remoteDataSource.deleteAccount();
     } on FirebaseAuthException catch (e) {
-      throw Exception(e.message ?? "Failed to delete account");
+      throw Failure(FirebaseErrorHandler.getReadableError(e));
     } catch (e) {
-      throw Exception(e.toString());
+      throw Failure(e.toString());
     }
   }
 
@@ -73,9 +75,9 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       await remoteDataSource.logout();
     } on FirebaseAuthException catch (e) {
-      throw Exception(e.message ?? "Failed to logout");
+      throw Failure(FirebaseErrorHandler.getReadableError(e));
     } catch (e) {
-      throw Exception(e.toString());
+      throw Failure(e.toString());
     }
   }
 }

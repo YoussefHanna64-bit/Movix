@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movix/features/movies/domain/entities/movieDetails_entity.dart';
+import 'package:movix/features/movies/domain/entities/movie_details_entity.dart';
 import 'package:movix/features/profile/presentation/cubit/profile_cubit.dart';
 import 'package:movix/features/profile/presentation/cubit/profile_state.dart';
+import 'package:movix/core/theme/app_colors.dart';
 
 class MovieBanner extends StatelessWidget {
   final MovieDetailsEntity movie;
@@ -34,10 +35,10 @@ class MovieBanner extends StatelessWidget {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Colors.black.withOpacity(0.9),
+                  AppColors.black.withOpacity(0.9),
                   Colors.transparent,
                   Colors.transparent,
-                  Colors.black,
+                  AppColors.black,
                 ],
                 stops: const [0.02, 0.25, 0.55, 0.85],
               ),
@@ -50,9 +51,9 @@ class MovieBanner extends StatelessWidget {
                 width: 95,
                 height: 95,
                 decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.textPrimary,
                     shape: BoxShape.circle,
-                    border: Border.all(width: 5, color: Colors.yellow)),
+                    border: Border.all(width: 5, color: AppColors.yellow)),
                 child: Center(
                   child: Container(
                     width: 72,
@@ -63,7 +64,7 @@ class MovieBanner extends StatelessWidget {
                     ),
                     child: const Icon(
                       Icons.play_arrow_rounded,
-                      color: Colors.white,
+                      color: AppColors.textPrimary,
                       size: 42,
                     ),
                   ),
@@ -83,7 +84,7 @@ class MovieBanner extends StatelessWidget {
                   },
                   icon: Icon(
                     isBookmarked ? Icons.bookmark : Icons.bookmark_border,
-                    color: isBookmarked ? Colors.yellow : Colors.white,
+                    color: isBookmarked ? AppColors.yellow : AppColors.textPrimary,
                     size: 40,
                   ),
                 );
@@ -97,7 +98,7 @@ class MovieBanner extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 35),
+              icon: const Icon(Icons.arrow_back_ios_new, color: AppColors.textPrimary, size: 35),
             ),
           ),
           Positioned(
@@ -110,14 +111,14 @@ class MovieBanner extends StatelessWidget {
                 Text(
                   movie.title,
                   style: const TextStyle(
-                      color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                      color: AppColors.textPrimary, fontSize: 24, fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 10),
                 Text(
                   movie.year.toString(),
                   style: const TextStyle(
-                      color: Colors.grey, fontSize: 20, fontWeight: FontWeight.bold),
+                      color: AppColors.grey, fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ],
             ),

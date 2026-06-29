@@ -2,16 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movix/features/home/domain/entities/movie_entity.dart';
 import 'package:movix/features/home/presentation/widgets/movie_card_widget.dart';
-import 'package:movix/features/movies/domain/entities/movieDetails_entity.dart';
+import 'package:movix/features/movies/domain/entities/movie_details_entity.dart';
 import 'package:movix/features/movies/presentation/cubit/movies_cubit.dart';
 import 'package:movix/features/movies/presentation/cubit/movies_state.dart';
-import 'package:movix/features/movies/presentation/widgets/castCard.dart';
-import 'package:movix/features/movies/presentation/widgets/movieBanner.dart';
-import 'package:movix/features/movies/presentation/widgets/screenShots.dart';
+import 'package:movix/features/movies/presentation/widgets/cast_card.dart';
+import 'package:movix/features/movies/presentation/widgets/movie_banner.dart';
+import 'package:movix/features/movies/presentation/widgets/screen_shots.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../profile/presentation/cubit/profile_cubit.dart';
-import '../widgets/statCard.dart';
+import '../widgets/stat_card.dart';
+import 'package:movix/core/theme/app_colors.dart';
 
 class MovieDetailsScreen extends StatefulWidget {
   const MovieDetailsScreen({super.key});
@@ -63,7 +64,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: AppColors.black,
       body: BlocConsumer<MoviesCubit, MoviesState>(
         listener: (context, state) {
           if (state is MovieDetailsLoaded) {
@@ -75,7 +76,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
         builder: (context, state) {
           if (state is MovieDetailsLoading || movieId == null) {
             return const Center(
-                child: CircularProgressIndicator(color: Colors.yellowAccent));
+                child: CircularProgressIndicator(color: AppColors.yellow));
           } else if (state is MovieDetailsError) {
             return Center(
               child: Padding(
@@ -84,17 +85,17 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Icon(Icons.error_outline,
-                        color: Colors.red, size: 60),
+                        color: AppColors.error, size: 60),
                     const SizedBox(height: 16),
                     const Text(
                       "Something went wrong while loading movie details. Please try again later.",
-                      style: TextStyle(color: Colors.white, fontSize: 18),
+                      style: TextStyle(color: AppColors.textPrimary, fontSize: 18),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 10),
                     Text(
                       state.errorMessage,
-                      style: const TextStyle(color: Colors.grey, fontSize: 14),
+                      style: const TextStyle(color: AppColors.grey, fontSize: 14),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 24),
@@ -103,8 +104,8 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                       icon: const Icon(Icons.arrow_back),
                       label: const Text("Go Back"),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                        foregroundColor: Colors.white,
+                        backgroundColor: AppColors.error,
+                        foregroundColor: AppColors.textPrimary,
                       ),
                     ),
                   ],
@@ -131,7 +132,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                   child: ElevatedButton(
                     onPressed: () => _playVideo(movieDetail!.ytTrailerCode),
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
+                        backgroundColor: AppColors.error,
                         fixedSize: Size(MediaQuery.of(context).size.width, 50),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -139,7 +140,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                     child: const Text(
                       "Watch",
                       style: TextStyle(
-                          color: Colors.white,
+                          color: AppColors.textPrimary,
                           fontSize: 20,
                           fontWeight: FontWeight.bold),
                     ),
@@ -175,7 +176,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                         const Text(
                           "Screenshots",
                           style: TextStyle(
-                              color: Colors.white,
+                              color: AppColors.textPrimary,
                               fontWeight: FontWeight.bold,
                               fontSize: 24),
                         ),
@@ -199,7 +200,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                                 },
                               )
                             : const Center(
-                                child: Text("No Screenshots available", style: TextStyle(color: Colors.grey))),
+                                child: Text("No Screenshots available", style: TextStyle(color: AppColors.grey))),
                       ],
                     )),
 
@@ -213,7 +214,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                       const Text(
                         "Similar",
                         style: TextStyle(
-                            color: Colors.white,
+                            color: AppColors.textPrimary,
                             fontWeight: FontWeight.bold,
                             fontSize: 24),
                       ),
@@ -251,7 +252,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                               child: Text(
                                 "Not Available for now",
                                 style: TextStyle(
-                                    color: Colors.white,
+                                    color: AppColors.textPrimary,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20),
                               ),
@@ -269,7 +270,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                       const Text(
                         "Summary",
                         style: TextStyle(
-                            color: Colors.white,
+                            color: AppColors.textPrimary,
                             fontWeight: FontWeight.bold,
                             fontSize: 24),
                       ),
@@ -279,7 +280,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                       Text(
                         movieDetail!.summary,
                         style:
-                            const TextStyle(color: Colors.white, fontSize: 18),
+                            const TextStyle(color: AppColors.textPrimary, fontSize: 18),
                       ),
                     ],
                   ),
@@ -295,7 +296,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                       const Text(
                         "Cast",
                         style: TextStyle(
-                            color: Colors.white,
+                            color: AppColors.textPrimary,
                             fontWeight: FontWeight.bold,
                             fontSize: 24),
                       ),
@@ -318,7 +319,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                               },
                             )
                           : const Center(
-                              child: Text("No Cast available", style: TextStyle(color: Colors.grey))),
+                              child: Text("No Cast available", style: TextStyle(color: AppColors.grey))),
                     ],
                   ),
                 ),
@@ -333,7 +334,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                       const Text(
                         "Genres",
                         style: TextStyle(
-                            color: Colors.white,
+                            color: AppColors.textPrimary,
                             fontWeight: FontWeight.bold,
                             fontSize: 24),
                       ),
@@ -357,13 +358,13 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                                   decoration: BoxDecoration(
                                     borderRadius:
                                         BorderRadiusGeometry.circular(8),
-                                    color: Colors.grey[800],
+                                    color: AppColors.grey,
                                   ),
                                   child: Center(
                                       child: Text(
                                     movieDetail!.genres[index],
                                     style: const TextStyle(
-                                      color: Colors.white,
+                                      color: AppColors.textPrimary,
                                       fontSize: 16,
                                       fontWeight: FontWeight.w400,
                                     ),
@@ -374,7 +375,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                               child: Text(
                                 "Not Available for now",
                                 style: TextStyle(
-                                    color: Colors.white,
+                                    color: AppColors.textPrimary,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20),
                               ),

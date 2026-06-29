@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movix/features/auth/presentation/cubit/auth_cubit.dart';
+import 'package:movix/core/theme/app_colors.dart';
 
 class ForgetPasswordScreen extends StatefulWidget {
   const ForgetPasswordScreen({super.key});
@@ -38,17 +39,17 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF121312),
+      backgroundColor: AppColors.black,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFFF6BD00)),
+          icon: const Icon(Icons.arrow_back, color: AppColors.yellow),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: const Text(
           "Forget Password",
-          style: TextStyle(color: Color(0xFFF6BD00)),
+          style: TextStyle(color: AppColors.yellow),
         ),
         centerTitle: true,
       ),
@@ -67,14 +68,14 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                 const SizedBox(height: 50),
                 TextFormField(
                   controller: _emailController,
-                  style: const TextStyle(color: Colors.white),
+                  style: const TextStyle(color: AppColors.textPrimary),
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: const Color(0xFF282A28),
-                    prefixIcon: const Icon(Icons.email, color: Colors.white),
+                    fillColor: AppColors.grey,
+                    prefixIcon: const Icon(Icons.email, color: AppColors.textPrimary),
                     hintText: "Email",
-                    hintStyle: const TextStyle(color: Colors.white70),
+                    hintStyle: const TextStyle(color: AppColors.textSecondary),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: BorderSide.none,
@@ -103,8 +104,8 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                       return ElevatedButton(
                         onPressed: () {},
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFF6BD00),
-                          foregroundColor: Colors.black,
+                          backgroundColor: AppColors.yellow,
+                          foregroundColor: AppColors.black,
                           minimumSize: const Size(double.infinity, 50),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -122,8 +123,8 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFF6BD00),
-                        foregroundColor: Colors.black,
+                        backgroundColor: AppColors.yellow,
+                        foregroundColor: AppColors.black,
                         minimumSize: const Size(double.infinity, 50),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),

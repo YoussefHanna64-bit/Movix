@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:movix/core/di/injection_container.dart' as di;
+import 'package:movix/core/domain/usecases/set_onboarding_seen_usecase.dart';
 import '../../../../core/routes/app_routes.dart';
 import '../../data/models/onboarding_model.dart';
 import '../widgets/onboarding_content.dart';
+import 'package:movix/core/theme/app_colors.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -26,9 +28,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         end: Alignment.bottomCenter,
         colors: [
           Colors.transparent,
-          Color(0xaa121312),
-          Color(0xff121312),
-          Color(0xff121312)
+          AppColors.black80,
+          AppColors.black,
+          AppColors.black
         ],
         stops: [0.0, 0.5, 0.91, 1.0],
       ),
@@ -120,7 +122,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             primaryText = 'Finish';
           }
 
-          // Passing the strongly-typed properties directly to your reusable widget
           return OnboardingContent(
             title: pageData.title,
             desc: pageData.desc,
@@ -129,8 +130,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             buttonText: primaryText,
             onButtonTap: () async {
               if (isLastPage) {
-                final prefs = await SharedPreferences.getInstance();
-                await prefs.setBool('has_seen_onboarding', true);
+                final setOnboardingSeen = di.sl<SetOnboardingSeenUseCase>();
+                await setOnboardingSeen.execute();
                 if (context.mounted) {
                   await Navigator.pushReplacementNamed(
                       context, AppRoutes.login);

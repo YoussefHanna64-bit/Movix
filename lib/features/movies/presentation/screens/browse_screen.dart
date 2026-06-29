@@ -47,7 +47,14 @@ class _BrowseScreenState extends State<BrowseScreen> {
       body: SafeArea(
           child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: BlocBuilder<HomeCubit, HomeState>(
+        child: BlocConsumer<HomeCubit, HomeState>(
+          listener: (context, state) {
+            if (state is HomeLoaded && state.loadMoreError != null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(state.loadMoreError!)),
+              );
+            }
+          },
           builder: (context, state) {
             if (state is HomeError) {
               return CustomErrorWidget(

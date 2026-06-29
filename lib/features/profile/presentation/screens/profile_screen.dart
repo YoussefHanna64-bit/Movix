@@ -65,8 +65,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ProfileHeader(
                         username: user.name,
                         avatarUrl: "assets/images/avatar${user.avatar + 1}.png",
-                        wishlistCount: user.wishList?.length ?? 0,
-                        watchedCount: user.history?.length ?? 0,
+                        wishlistCount: profileState.wishlistMovies.length,
+                        watchedCount: profileState.historyMovies.length,
                       ),
                       const SizedBox(height: 16),
                       ProfileActions(
@@ -82,7 +82,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         dividerColor: Colors.transparent,
                         indicatorColor: AppColors.yellow,
                         labelColor: AppColors.yellow,
-                        unselectedLabelColor: Colors.grey,
+                        unselectedLabelColor: AppColors.grey,
                         tabs: [
                           Tab(
                             icon: Icon(Icons.list, size: 30),

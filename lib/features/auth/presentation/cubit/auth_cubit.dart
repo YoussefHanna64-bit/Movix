@@ -1,5 +1,5 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movix/core/utils/firebase_error_handler.dart';
 import 'package:movix/features/auth/domain/usecases/change_password_usecase.dart';
 import 'package:movix/features/auth/domain/usecases/delete_account_usecase.dart';
 import '../../domain/usecases/register_usecase.dart';
@@ -7,7 +7,12 @@ import '../../domain/usecases/login_usecase.dart';
 import '../../domain/usecases/logout_usecase.dart';
 import '../../domain/usecases/forget_password_usecase.dart';
 
-abstract class AuthState {}
+abstract class AuthState extends Equatable {
+  const AuthState();
+
+  @override
+  List<Object?> get props => [];
+}
 
 class AuthInitial extends AuthState {}
 
@@ -18,7 +23,10 @@ class AuthSuccess extends AuthState {}
 class AuthFailure extends AuthState {
   final String error;
 
-  AuthFailure(this.error);
+  const AuthFailure(this.error);
+
+  @override
+  List<Object?> get props => [error];
 }
 
 class AuthCubit extends Cubit<AuthState> {
@@ -57,7 +65,7 @@ class AuthCubit extends Cubit<AuthState> {
       );
       emit(AuthSuccess());
     } catch (e) {
-      emit(AuthFailure(FirebaseErrorHandler.getReadableError(e)));
+      emit(AuthFailure(e.toString().replaceAll('Exception: ', '')));
     }
   }
 
@@ -71,7 +79,7 @@ class AuthCubit extends Cubit<AuthState> {
       );
       emit(AuthSuccess());
     } catch (e) {
-      emit(AuthFailure(FirebaseErrorHandler.getReadableError(e)));
+      emit(AuthFailure(e.toString().replaceAll('Exception: ', '')));
     }
   }
 
@@ -81,7 +89,7 @@ class AuthCubit extends Cubit<AuthState> {
       await changePasswordUseCase.execute(newPassword);
       emit(AuthSuccess());
     } catch (e) {
-      emit(AuthFailure(FirebaseErrorHandler.getReadableError(e)));
+      emit(AuthFailure(e.toString().replaceAll('Exception: ', '')));
     }
   }
 
@@ -91,7 +99,7 @@ class AuthCubit extends Cubit<AuthState> {
       await deleteAccountUseCase.execute();
       emit(AuthInitial());
     } catch (e) {
-      emit(AuthFailure(FirebaseErrorHandler.getReadableError(e)));
+      emit(AuthFailure(e.toString().replaceAll('Exception: ', '')));
     }
   }
 
@@ -102,7 +110,7 @@ class AuthCubit extends Cubit<AuthState> {
       await logoutUseCase.execute();
       emit(AuthInitial());
     } catch (e) {
-      emit(AuthFailure(FirebaseErrorHandler.getReadableError(e)));
+      emit(AuthFailure(e.toString().replaceAll('Exception: ', '')));
     }
   }
 
@@ -113,7 +121,7 @@ class AuthCubit extends Cubit<AuthState> {
       await forgetPasswordUseCase.execute(email);
       emit(AuthSuccess());
     } catch (e) {
-      emit(AuthFailure(FirebaseErrorHandler.getReadableError(e)));
+      emit(AuthFailure(e.toString().replaceAll('Exception: ', '')));
     }
   }
 }

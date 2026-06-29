@@ -21,7 +21,14 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: BlocBuilder<HomeCubit, HomeState>(
+      body: BlocConsumer<HomeCubit, HomeState>(
+        listener: (context, state) {
+          if (state is HomeLoaded && state.loadMoreError != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.loadMoreError!)),
+            );
+          }
+        },
         builder: (context, state) {
           if (state is HomeLoading || state is HomeInitial) {
             return const Center(child: CircularProgressIndicator());
@@ -54,9 +61,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     end: Alignment.bottomCenter,
                     colors: [
                       Colors.transparent,
-                      Color(0xaa121312),
-                      Color(0xff121312),
-                      Color(0xff121312)
+                      AppColors.black80,
+                      AppColors.black,
+                      AppColors.black
                     ],
                     stops: [0.0, 0.5, 0.91, 1.0],
                   )),

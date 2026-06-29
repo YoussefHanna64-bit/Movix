@@ -29,7 +29,7 @@ class _LayoutScreenState extends State<LayoutScreen> {
             selectedIndex = value;
             setState(() {});
           },
-          fixedColor: Colors.white,
+          fixedColor: AppColors.textPrimary,
           selectedFontSize: 16,
           selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
           backgroundColor: AppColors.grey,
@@ -55,7 +55,7 @@ class _LayoutScreenState extends State<LayoutScreen> {
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(24)),
           child: ImageIcon(
             AssetImage(image),
-            color: Colors.yellow,
+            color: AppColors.yellow,
           ),
         ));
   }

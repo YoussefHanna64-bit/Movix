@@ -1,8 +1,10 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movix/core/routes/app_routes.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:movix/features/profile/presentation/cubit/profile_cubit.dart';
+import 'package:movix/core/di/injection_container.dart' as di;
+import 'package:movix/core/domain/usecases/check_app_state_usecase.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -19,17 +21,20 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _checkAuthAndOnboarding() async {
-    final prefs = await SharedPreferences.getInstance();
-    final hasSeenOnboarding = prefs.getBool('has_seen_onboarding') ?? false;
+    final checkAppState = di.sl<CheckAppStateUseCase>();
+    final result = await checkAppState.execute();
 
     Future.delayed(const Duration(seconds: 3), () {
       if (!mounted) return;
-      if (!hasSeenOnboarding) {
+      if (!result.hasSeenOnboarding) {
         Navigator.pushReplacementNamed(context, AppRoutes.onboarding);
         return;
       }
-      final user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
+      
+      if (result.isLoggedIn) {
+        if (context.mounted) {
+          context.read<ProfileCubit>().loadProfile();
+        }
         Navigator.pushReplacementNamed(context, AppRoutes.layout);
       } else {
         Navigator.pushReplacementNamed(context, AppRoutes.login);

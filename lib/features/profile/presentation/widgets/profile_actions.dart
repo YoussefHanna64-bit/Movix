@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movix/features/profile/presentation/widgets/profile_custom_button.dart';
+import 'package:movix/core/theme/app_colors.dart';
 
 class ProfileActions extends StatelessWidget {
   final VoidCallback onEditPressed;
@@ -21,8 +22,8 @@ class ProfileActions extends StatelessWidget {
               padding: const EdgeInsets.all(4),
               child: ProfileCustomButton(
                 label: "Edit Profile",
-                backgroundColor: const Color(0xFFF6BD00),
-                textColor: Colors.black,
+                backgroundColor: AppColors.yellow,
+                textColor: AppColors.black,
                 onPressed: onEditPressed,
               ),
             ),
@@ -36,8 +37,8 @@ class ProfileActions extends StatelessWidget {
               padding: const EdgeInsets.all(4),
               child: ProfileCustomButton(
                 label: "Logout",
-                backgroundColor: const Color(0xFFE82626),
-                textColor: Colors.white,
+                backgroundColor: AppColors.error,
+                textColor: AppColors.textPrimary,
                 icon: Icons.logout_rounded,
                 onPressed: onLogoutPressed,
               ),

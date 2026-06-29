@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movix/core/theme/app_colors.dart';
 
 class ProfileCustomButton extends StatelessWidget {
   final String label;
@@ -24,7 +25,7 @@ class ProfileCustomButton extends StatelessWidget {
       ),
       iconAlignment: IconAlignment.end,
       onPressed: onPressed,
-      icon: icon != null ? Icon(icon, color: Colors.white, size: 20) : null,
+      icon: icon != null ? Icon(icon, color: AppColors.textPrimary, size: 20) : null,
       label: Text(label,
           style: TextStyle(
             fontSize: 18,

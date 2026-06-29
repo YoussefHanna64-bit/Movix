@@ -15,7 +15,7 @@ class AppButton extends StatelessWidget {
     required this.onPressed,
     this.isLoading = false,
     this.backgroundColor = AppColors.yellow,
-    this.foregroundColor = Colors.black,
+    this.foregroundColor = AppColors.black,
     this.height = 50,
   });
 
@@ -25,8 +25,8 @@ class AppButton extends StatelessWidget {
     required this.onPressed,
     this.isLoading = false,
     this.height = 50,
-  })  : backgroundColor = Colors.redAccent,
-        foregroundColor = Colors.white;
+  })  : backgroundColor = AppColors.error,
+        foregroundColor = AppColors.textPrimary;
 
   @override
   Widget build(BuildContext context) {

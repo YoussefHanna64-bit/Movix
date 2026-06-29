@@ -4,6 +4,8 @@ import 'package:movix/core/routes/app_routes.dart';
 import 'package:movix/core/widgets/app_text_field.dart';
 import 'package:movix/core/widgets/avatar_picker.dart';
 import 'package:movix/features/auth/presentation/cubit/auth_cubit.dart';
+import 'package:movix/features/profile/presentation/cubit/profile_cubit.dart';
+import 'package:movix/core/theme/app_colors.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -74,14 +76,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF121312),
+      backgroundColor: AppColors.black,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         automaticallyImplyLeading: false,
         title: const Text(
           "Register",
-          style: TextStyle(color: Color(0xFFF6BD00)),
+          style: TextStyle(color: AppColors.yellow),
         ),
         centerTitle: true,
       ),
@@ -99,7 +101,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               const SizedBox(height: 10),
               const Text(
                 "Avatar",
-                style: TextStyle(color: Colors.white, fontSize: 16),
+                style: TextStyle(color: AppColors.textPrimary, fontSize: 16),
               ),
               const SizedBox(height: 30),
               Padding(
@@ -154,6 +156,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       BlocConsumer<AuthCubit, AuthState>(
                         listener: (context, state) {
                           if (state is AuthSuccess) {
+                            context.read<ProfileCubit>().loadProfile();
                             Navigator.pushReplacementNamed(
                                 context, AppRoutes.layout);
                           } else if (state is AuthFailure) {
@@ -167,8 +170,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             return ElevatedButton(
                                 onPressed: () {},
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFFF6BD00),
-                                  foregroundColor: Colors.black,
+                                  backgroundColor: AppColors.yellow,
+                                  foregroundColor: AppColors.black,
                                   minimumSize: const Size(double.infinity, 50),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10),
@@ -189,8 +192,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               }
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFFF6BD00),
-                              foregroundColor: Colors.black,
+                              backgroundColor: AppColors.yellow,
+                              foregroundColor: AppColors.black,
                               minimumSize: const Size(double.infinity, 50),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
@@ -210,7 +213,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         children: [
                           const Text(
                             "Already Have Account ? ",
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(color: AppColors.textPrimary),
                           ),
                           GestureDetector(
                             onTap: () {
@@ -220,7 +223,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             child: const Text(
                               "Login",
                               style: TextStyle(
-                                color: Color(0xFFF6BD00),
+                                color: AppColors.yellow,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movix/features/home/domain/entities/movie_entity.dart';
 import 'package:movix/features/home/presentation/widgets/movie_card_widget.dart';
+import 'package:movix/core/theme/app_colors.dart';
 
 class ProfileMovieList extends StatelessWidget {
   final List<MovieEntity> movies;
@@ -20,10 +21,10 @@ class ProfileMovieList extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(emptyIcon, color: Colors.white24, size: 64),
+            Icon(emptyIcon, color: AppColors.dividerColor, size: 64),
             const SizedBox(height: 16),
             Text(emptyLabel,
-                style: const TextStyle(color: Colors.white38, fontSize: 16)),
+                style: const TextStyle(color: AppColors.textHint, fontSize: 16)),
           ],
         ),
       );

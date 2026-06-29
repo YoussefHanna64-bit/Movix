@@ -52,10 +52,15 @@ class HomeCubit extends Cubit<HomeState> {
       emit(HomeLoaded(
         movies: [...currentState.movies, ...nextMovies],
         actionMovies: currentState.actionMovies,
+        loadMoreError: null,
       ));
     } catch (e) {
       currentPage--;
-      emit(HomeError(errorMessage: e.toString()));
+      emit(HomeLoaded(
+        movies: currentState.movies,
+        actionMovies: currentState.actionMovies,
+        loadMoreError: e.toString(),
+      ));
     } finally {
       isLoadingMore = false;
     }

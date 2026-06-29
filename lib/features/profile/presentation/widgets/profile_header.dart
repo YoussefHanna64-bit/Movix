@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movix/core/theme/app_colors.dart';
 
 class ProfileHeader extends StatelessWidget {
   final String username;
@@ -27,10 +28,10 @@ class ProfileHeader extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               username,
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white),
+                  color: AppColors.textPrimary),
             )
           ],
         ),
@@ -38,18 +39,18 @@ class ProfileHeader extends StatelessWidget {
           children: [
             Text(
               wishlistCount.toString(),
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white),
+                  color: AppColors.textPrimary),
             ),
             const SizedBox(height: 8),
-            Text(
+            const Text(
               "Wishlist",
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white),
+                  color: AppColors.textPrimary),
             )
           ],
         ),
@@ -57,18 +58,18 @@ class ProfileHeader extends StatelessWidget {
           children: [
             Text(
               watchedCount.toString(),
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white),
+                  color: AppColors.textPrimary),
             ),
             const SizedBox(height: 8),
-            Text(
+            const Text(
               "Watched",
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white),
+                  color: AppColors.textPrimary),
             )
           ],
         ),

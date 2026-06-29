@@ -24,6 +24,8 @@ class FirebaseErrorHandler {
           return 'No internet connection. Please check your network.';
         case 'operation-not-allowed':
           return 'This sign-in method is not enabled.';
+        case 'requires-recent-login':
+          return 'Please re-login to delete your account.';
         default:
           return e.message ?? 'An unexpected error occurred.';
       }
@@ -62,6 +64,8 @@ class FirebaseErrorHandler {
           return 'No internet connection. Please check your network.';
         case 'permission-denied':
           return 'You do not have permission to access this data.';
+        case 'requires-recent-login':
+          return 'Please re-login to delete your account.';
         default:
           return match.group(2)?.isNotEmpty == true
               ? match.group(2)!

@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:movix/features/movies/domain/entities/cast_entity.dart';
-import 'package:movix/features/movies/domain/entities/similarMovie_entity.dart';
+import 'package:movix/features/movies/domain/entities/similar_movie_entity.dart';
 
 class MovieDetailsEntity extends Equatable {
   final String title;
