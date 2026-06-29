@@ -5,6 +5,7 @@ class MovieModel extends MovieEntity {
     required super.id,
     required super.title,
     required super.rating,
+    required super.year,
     required super.backgroundImage,
     required super.coverImage,
     required super.mpaRating,
@@ -16,6 +17,7 @@ class MovieModel extends MovieEntity {
       id: json['id'] as int? ?? 0,
       title: json['title'] as String? ?? 'Unknown',
       rating: (json['rating'] as num?)?.toDouble() ?? 0.0,
+      year: json["year"] as int? ?? 0000,
       backgroundImage: json['background_image_original'] as String? ??
           json['background_image'] as String? ??
           '',

@@ -1,3 +1,4 @@
+import 'package:movix/features/home/domain/usecases/get_next_page_use_case.dart';
 import 'package:movix/features/movies/data/datasources/movieDetails_remote_data_source.dart';
 import 'package:movix/features/movies/data/repositories/movieDetails_repository_impl.dart';
 import 'package:movix/features/movies/domain/repositories/movieDetails_repository.dart';
@@ -65,10 +66,12 @@ Future<void> init() async {
   sl.registerFactory(() => HomeCubit(
         getMoviesUseCase: sl(),
         getActionMoviesUseCase: sl(),
+        getNextPageUseCase: sl(),
       ));
 
   sl.registerLazySingleton(() => GetMoviesUseCase(sl()));
   sl.registerLazySingleton(() => GetActionMoviesUseCase(sl()));
+  sl.registerLazySingleton(() => GetNextPageUseCase(repository: sl()));
   sl.registerLazySingleton(() => GetMovieByIdUseCase(sl()));
   sl.registerLazySingleton(() => GetMoviesByIdsUseCase(sl()));
 

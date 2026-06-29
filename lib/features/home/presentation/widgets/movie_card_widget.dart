@@ -33,6 +33,7 @@ class MovieCardWidget extends StatelessWidget {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -61,6 +62,18 @@ class MovieCardWidget extends StatelessWidget {
                     )
                   ],
                 ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                width: 65,
+                height: 30,
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  color: const Color(0xff121312).withValues(alpha: 0.71),
+                ),
+                child: Center(child: Text(movie.year.toString())),
               ),
             )
           ],

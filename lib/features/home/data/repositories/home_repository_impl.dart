@@ -25,4 +25,13 @@ class HomeRepositoryImpl implements HomeRepository {
       throw Exception(NetworkExceptions.getErrorMessage(e));
     }
   }
+
+  @override
+  Future<List<MovieEntity>> getNextPage({required int page}) async {
+    try {
+      return await remoteDataSource.getNextPage(page: page);
+    } catch (e) {
+      throw Exception(NetworkExceptions.getErrorMessage(e));
+    }
+  }
 }
