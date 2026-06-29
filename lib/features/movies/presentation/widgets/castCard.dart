@@ -36,7 +36,7 @@ class CastCard extends StatelessWidget{
                 },
               ),
             ),
-            SizedBox(width: 15,),
+            const SizedBox(width: 15,),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
