@@ -1,0 +1,83 @@
+import 'package:movix/core/error/failure.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:movix/core/utils/firebase_error_handler.dart';
+import '../../domain/entities/user_entity.dart';
+import '../../domain/repositories/auth_repository.dart';
+import '../datasources/auth_remote_data_source.dart';
+
+class AuthRepositoryImpl implements AuthRepository {
+  final AuthRemoteDataSource remoteDataSource;
+
+  AuthRepositoryImpl(this.remoteDataSource);
+
+  @override
+  Future<UserEntity> login(String email, String password) async {
+    try {
+      final userModel = await remoteDataSource.login(email, password);
+      return userModel;
+    } on FirebaseAuthException catch (e) {
+      throw Failure(FirebaseErrorHandler.getReadableError(e));
+    } catch (e) {
+      throw Failure(e.toString());
+    }
+  }
+
+  @override
+  Future<UserEntity> register(String name, String email, String password,
+      String phoneNumber, int avatar) async {
+    try {
+      final userModel = await remoteDataSource.register(
+          name, email, password, phoneNumber, avatar);
+      return userModel;
+    } on FirebaseAuthException catch (e) {
+      throw Failure(FirebaseErrorHandler.getReadableError(e));
+    } catch (e) {
+      throw Failure(e.toString());
+    }
+  }
+
+  @override
+  Future<void> forgetPassword(String email) async {
+    try {
+      await remoteDataSource.forgetPassword(email);
+    } on FirebaseAuthException catch (e) {
+      // You can customize these error messages based on e.code
+      throw Failure(FirebaseErrorHandler.getReadableError(e));
+    } catch (e) {
+      throw Failure(e.toString());
+    }
+  }
+
+  @override
+  Future<void> changePassword(String newPassword) async {
+    try {
+      await remoteDataSource.changePassword(newPassword);
+    } on FirebaseAuthException catch (e) {
+      throw Failure(FirebaseErrorHandler.getReadableError(e));
+    } catch (e) {
+      throw Failure(e.toString());
+    }
+  }
+
+  @override
+  Future<void> deleteAccount() async {
+    try {
+      await remoteDataSource.deleteAccount();
+    } on FirebaseAuthException catch (e) {
+      throw Failure(FirebaseErrorHandler.getReadableError(e));
+    } catch (e) {
+      throw Failure(e.toString());
+    }
+  }
+
+  @override
+  Future<void> logout() async {
+    try {
+      await remoteDataSource.logout();
+    } on FirebaseAuthException catch (e) {
+      throw Failure(FirebaseErrorHandler.getReadableError(e));
+    } catch (e) {
+      throw Failure(e.toString());
+    }
+  }
+}

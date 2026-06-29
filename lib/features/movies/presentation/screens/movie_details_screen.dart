@@ -1,73 +1,394 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:movix/features/movies/presentation/widgets/movieBanner.dart';
-import 'package:movix/features/movies/presentation/widgets/screenShots.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movix/features/home/domain/entities/movie_entity.dart';
+import 'package:movix/features/home/presentation/widgets/movie_card_widget.dart';
+import 'package:movix/features/movies/domain/entities/movie_details_entity.dart';
+import 'package:movix/features/movies/presentation/cubit/movies_cubit.dart';
+import 'package:movix/features/movies/presentation/cubit/movies_state.dart';
+import 'package:movix/features/movies/presentation/widgets/cast_card.dart';
+import 'package:movix/features/movies/presentation/widgets/movie_banner.dart';
+import 'package:movix/features/movies/presentation/widgets/screen_shots.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-import '../widgets/statCard.dart';
+import '../../../profile/presentation/cubit/profile_cubit.dart';
+import '../widgets/stat_card.dart';
+import 'package:movix/core/theme/app_colors.dart';
 
-class MovieDetailsScreen extends StatelessWidget {
+class MovieDetailsScreen extends StatefulWidget {
+  const MovieDetailsScreen({super.key});
+
+  @override
+  State<MovieDetailsScreen> createState() => _MovieDetailsScreenState();
+}
+
+class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
+  MovieDetailsEntity? movieDetail;
+  int? movieId;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (movieId == null) {
+      movieId = ModalRoute.of(context)?.settings.arguments as int?;
+      if (movieId != null) {
+        context.read<MoviesCubit>().loadMovieDetails(movieId!);
+        context.read<ProfileCubit>().addMovieToHistory(movieId!);
+      }
+    }
+  }
+
+  Future<void> _playVideo(String? ytTrailerCode) async {
+    if (ytTrailerCode == null || ytTrailerCode.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Video not available for now")),
+      );
+      return;
+    }
+
+    final videoID = ytTrailerCode.trim();
+    final url = Uri.parse("https://www.youtube.com/watch?v=$videoID");
+
+    try {
+      if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Could not open YouTube")),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Could not open YouTube")),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-
-              ///image banner
-              MovieBanner(),
-
-              ///Watch button
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: ElevatedButton(onPressed: () {
-                  //play video
-                }, style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  fixedSize: Size(MediaQuery.of(context).size.width, 50),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10),
-                  )
-                ), child: Text("Watch" , style: TextStyle(color: Colors.white , fontSize: 20 , fontWeight: FontWeight.bold),) ,
-
-                    ),
-              ),
-
-              ///Data buttons (Horizontal)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  StatCard(icon: Icons.favorite , statName: "15"),
-                  StatCard(icon: Icons.favorite , statName: "15"),
-                  StatCard(icon: Icons.favorite , statName: "15"),
-                ],
-              ),
-
-              SizedBox(height: 10,),
-              ///Screenshots
-              Padding(
-                padding: const EdgeInsets.all(12.0),
+      backgroundColor: AppColors.black,
+      body: BlocConsumer<MoviesCubit, MoviesState>(
+        listener: (context, state) {
+          if (state is MovieDetailsLoaded) {
+            setState(() {
+              movieDetail = state.movie;
+            });
+          }
+        },
+        builder: (context, state) {
+          if (state is MovieDetailsLoading || movieId == null) {
+            return const Center(
+                child: CircularProgressIndicator(color: AppColors.yellow));
+          } else if (state is MovieDetailsError) {
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Screen Shots" , style: TextStyle(color: Colors.white , fontWeight: FontWeight.bold , fontSize: 24),),
-                    SizedBox(height: 20,),
-                    ScreenShots(image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsyJw2CoHmM_60-6oe2MU93wf-xJ4eHkVDvEG99W6sltKkOg_yrvJoBnA&s=10"),
-
-                    SizedBox(height: 20,),
-
-                    ScreenShots(image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQR5AkuKw0uIBoEvnTW1-jJ04sVhH6qVYclDXIqBXypYWNYmtXz_DoAsT-V&s=10"),
-
-                    SizedBox(height: 20,),
-                    ScreenShots(image: "https://m.media-amazon.com/images/M/MV5BN2YxZGRjMzYtZjE1ZC00MDI0LThjZmQtZTZmMzVmMmQ2NzBmXkEyXkFqcGc@._V1")
-
+                    const Icon(Icons.error_outline,
+                        color: AppColors.error, size: 60),
+                    const SizedBox(height: 16),
+                    const Text(
+                      "Something went wrong while loading movie details. Please try again later.",
+                      style: TextStyle(color: AppColors.textPrimary, fontSize: 18),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      state.errorMessage,
+                      style: const TextStyle(color: AppColors.grey, fontSize: 14),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 24),
+                    ElevatedButton.icon(
+                      onPressed: () => Navigator.of(context).pop(),
+                      icon: const Icon(Icons.arrow_back),
+                      label: const Text("Go Back"),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.error,
+                        foregroundColor: AppColors.textPrimary,
+                      ),
+                    ),
                   ],
                 ),
-              )
+              ),
+            );
+          }
 
-            ],
-          ),
-        )
+          if (movieDetail == null) return const SizedBox();
+
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                ///image banner
+                MovieBanner(
+                  movie: movieDetail!,
+                  movieId: movieId!,
+                  onPlayVideo: () => _playVideo(movieDetail!.ytTrailerCode),
+                ),
+
+                ///Watch button
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: ElevatedButton(
+                    onPressed: () => _playVideo(movieDetail!.ytTrailerCode),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.error,
+                        fixedSize: Size(MediaQuery.of(context).size.width, 50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        )),
+                    child: const Text(
+                      "Watch",
+                      style: TextStyle(
+                          color: AppColors.textPrimary,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+
+                ///Data buttons (Horizontal)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    StatCard(
+                        icon: Icons.favorite,
+                        statName: movieDetail!.likeCount.toString()),
+                    StatCard(
+                        icon: Icons.access_time_filled,
+                        statName: "${movieDetail!.filmTime}"),
+                    StatCard(
+                        icon: Icons.star,
+                        statName: movieDetail!.rating.toString()),
+                  ],
+                ),
+
+                const SizedBox(
+                  height: 10,
+                ),
+
+                ///Screenshots
+                Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Screenshots",
+                          style: TextStyle(
+                              color: AppColors.textPrimary,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 24),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        movieDetail!.screenshots.isNotEmpty
+                            ? ListView.separated(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: movieDetail!.screenshots.length,
+                                itemBuilder: (context, index) {
+                                  return ScreenShots(
+                                      image: movieDetail!.screenshots[index]);
+                                },
+                                separatorBuilder:
+                                    (BuildContext context, int index) {
+                                  return const SizedBox(
+                                    height: 20,
+                                  );
+                                },
+                              )
+                            : const Center(
+                                child: Text("No Screenshots available", style: TextStyle(color: AppColors.grey))),
+                      ],
+                    )),
+
+                ///Similar Movies
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 10.0, vertical: 8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Similar",
+                        style: TextStyle(
+                            color: AppColors.textPrimary,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      movieDetail!.similarMovies.isNotEmpty
+                          ? GridView.builder(
+                              itemCount: movieDetail!.similarMovies.length,
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                mainAxisSpacing: 20.0,
+                                crossAxisSpacing: 20.0,
+                                childAspectRatio: 189 / 279,
+                              ),
+                              itemBuilder: (context, index) {
+                                MovieEntity movie = MovieEntity(
+                                    id: movieDetail!.similarMovies[index].id,
+                                    title: "",
+                                    rating: movieDetail!
+                                        .similarMovies[index].rating,
+                                    year: movieDetail!.year,
+                                    backgroundImage: movieDetail!
+                                        .similarMovies[index].coverImg,
+                                    coverImage: movieDetail!
+                                        .similarMovies[index].coverImg,
+                                    mpaRating: "",
+                                    genres: []);
+                                return MovieCardWidget(movie: movie);
+                              })
+                          : const Center(
+                              child: Text(
+                                "Not Available for now",
+                                style: TextStyle(
+                                    color: AppColors.textPrimary,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20),
+                              ),
+                            ),
+                    ],
+                  ),
+                ),
+
+                ///Summary
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Summary",
+                        style: TextStyle(
+                            color: AppColors.textPrimary,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        movieDetail!.summary,
+                        style:
+                            const TextStyle(color: AppColors.textPrimary, fontSize: 18),
+                      ),
+                    ],
+                  ),
+                ),
+
+                ///Cast
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 10.0, vertical: 8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Cast",
+                        style: TextStyle(
+                            color: AppColors.textPrimary,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      movieDetail!.cast.isNotEmpty
+                          ? ListView.separated(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: movieDetail!.cast.length,
+                              itemBuilder: (context, index) {
+                                return CastCard(cast: movieDetail!.cast[index]);
+                              },
+                              separatorBuilder:
+                                  (BuildContext context, int index) {
+                                return const SizedBox(
+                                  height: 10,
+                                );
+                              },
+                            )
+                          : const Center(
+                              child: Text("No Cast available", style: TextStyle(color: AppColors.grey))),
+                    ],
+                  ),
+                ),
+
+                ///Genres
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 10.0, vertical: 8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Genres",
+                        style: TextStyle(
+                            color: AppColors.textPrimary,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24),
+                      ),
+                      const SizedBox(height: 10),
+                      movieDetail!.genres.isNotEmpty
+                          ? GridView.builder(
+                              itemCount: movieDetail!.genres.length,
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                mainAxisSpacing: 10.0,
+                                crossAxisSpacing: 20.0,
+                                childAspectRatio: 122 / 36,
+                              ),
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  width: 122,
+                                  height: 36,
+                                  decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadiusGeometry.circular(8),
+                                    color: AppColors.grey,
+                                  ),
+                                  child: Center(
+                                      child: Text(
+                                    movieDetail!.genres[index],
+                                    style: const TextStyle(
+                                      color: AppColors.textPrimary,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  )),
+                                );
+                              })
+                          : const Center(
+                              child: Text(
+                                "Not Available for now",
+                                style: TextStyle(
+                                    color: AppColors.textPrimary,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20),
+                              ),
+                            ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }
-
